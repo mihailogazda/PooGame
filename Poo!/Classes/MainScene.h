@@ -29,6 +29,17 @@ static const int levelLines[] =
 	NULL
 };
 
+static const int levelLimits[] = 
+{
+	0,
+	3,
+	5,
+	7,
+	10,
+	15,
+	0
+};
+
 static const int lineThickness = 16;
 
 class MainScene : public cocos2d::CCLayer
@@ -36,6 +47,7 @@ class MainScene : public cocos2d::CCLayer
 private:
 
 	void showNoAction(CCPoint pos);
+	int getRank(CCPoint pos);
 
 public:
     // Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone

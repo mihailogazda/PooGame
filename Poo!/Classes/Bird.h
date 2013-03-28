@@ -8,7 +8,8 @@
 enum BirdType 
 {
 	BirdTypeRegular = 0,
-	BirdTypeKing
+	BirdTypeKing,
+	BirdTypeDuke
 };
 
 
@@ -51,6 +52,16 @@ public:
 		type = BirdTypeKing;
 	}
 	CREATE_FUNC(BirdKing);
+};
+
+class BirdDuke : public Bird
+{
+public:
+	BirdDuke() :  Bird()
+	{
+		type = BirdTypeDuke;
+	}
+	CREATE_FUNC(BirdDuke);
 };
 
 

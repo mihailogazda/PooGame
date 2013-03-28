@@ -17,7 +17,9 @@ bool Bird::init()
 			case BirdTypeKing:
 				resourceName = "king.png";
 				break;
-
+			case BirdTypeDuke:
+				resourceName = "duke.png";
+				break;
 		};
 
 		CC_BREAK_IF(!resourceName);

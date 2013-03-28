@@ -103,9 +103,11 @@ void MainScene::ccTouchesEnded(CCSet* pTouches, CCEvent* pEvent)
 	CCPoint touchPos = touch->getLocationInView();
 
 	touchPos.y = CCDirector::sharedDirector()->getWinSizeInPixels().height - touchPos.y;
+
+	int rank = getRank(touchPos);
 	
 	//	Check if its in the King area or in empty - block it
-	if (touchPos.y > levelLines[0] || touchPos.y < levelLines[total - 2])
+	if ( rank <= 1 || rank == 6)
 	{
 		showNoAction(touchPos);
 		return;
@@ -127,21 +129,38 @@ void MainScene::ccTouchesEnded(CCSet* pTouches, CCEvent* pEvent)
 	}
 
 	//	Add bird
-	Bird *b = Bird::create();
+	Bird *b = NULL;
+	
+	if (touchPos.y >= levelLines[1])
+		b = BirdDuke::create();
+	else
+		b = Bird::create();
+
+
 	b->setPosition(touchPos);
 	this->addChild(b);
 	
-	//	Now send it to the correct position	
+	
+	//	Set to correct position
+	touchPos.y = levelLines[total - rank];
+	b->runAction(CCEaseIn::create(CCMoveTo::create(0.5, touchPos), 1));
+	
+
+}
+
+int MainScene::getRank(CCPoint pos)
+{
+	int total = sizeof(levelLines) / sizeof(levelLines[0]);
+	int ret = total;
 	for (int i = total - 1; i >= 0; i--)
 	{
-		if (touchPos.y < levelLines[i])
+		if (pos.y <= levelLines[i])
 		{
-			touchPos.y = levelLines[i + 1];
-			b->runAction(CCEaseIn::create(CCMoveTo::create(0.5, touchPos), 1));
+			ret = (total - 1) - i;
 			break;
 		}
 	}
-
+	return ret;
 }
 
 void MainScene::removeItemAction(CCNode* node)
