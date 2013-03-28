@@ -27,9 +27,12 @@ protected:
 	{
 		type = BirdTypeRegular;
 		m_sprite = NULL;		
+		dying = false;
 	}
 
 public:
+
+	bool dying;
 
 	//	public size getter
 	cocos2d::CCSize size;

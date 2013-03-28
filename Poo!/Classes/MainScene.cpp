@@ -81,12 +81,6 @@ bool MainScene::init()
     return bRet;
 }
 
-void MainScene::menuCloseCallback(CCObject* pSender)
-{
-    // "close" menu item clicked
-    CCDirector::sharedDirector()->end();
-}
-
 void MainScene::ccTouchesBegan(CCSet* touches, CCEvent* pEvent)
 {
 }
@@ -96,22 +90,24 @@ void MainScene::ccTouchesMoved(CCSet* touches, CCEvent* event)
 }
 
 void MainScene::ccTouchesEnded(CCSet* pTouches, CCEvent* pEvent)
-{
-	int total = sizeof(levelLines) / sizeof(int);
-
+{	
 	CCTouch* touch = (CCTouch*) pTouches->anyObject();
 	CCPoint touchPos = touch->getLocationInView();
 
+	//	Invert Y
 	touchPos.y = CCDirector::sharedDirector()->getWinSizeInPixels().height - touchPos.y;
 
+	//	get rank in visual and memory
+	int total = levelSize;
 	int rank = getRank(touchPos);
+	int memoryRank = total/* + 1*/ - rank;
 	
 	//	Check if its in the King area or in empty - block it
-	if ( rank <= 1 || rank == 6)
+	if ( rank <= 1 || rank == levelSize)
 	{
 		showNoAction(touchPos);
 		return;
-	}
+	}	
 	//	check for lines - block it
 	else
 	{
@@ -128,25 +124,46 @@ void MainScene::ccTouchesEnded(CCSet* pTouches, CCEvent* pEvent)
 		}
 	}
 
-	//	Add bird
-	Bird *b = NULL;
-	
-	if (touchPos.y >= levelLines[1])
-		b = BirdDuke::create();
-	else
-		b = Bird::create();
+	//	Check if bird exists if it does delete it
+	Bird *b = NULL;	
+	b = getBirdAtPosition(touchPos);
+	if (b && !b->dying)
+	{
+		fadeToDeath(b);
+		birds[memoryRank]++;
+		return;
+	}
+	else if (birds[memoryRank] <= 0)
+	{
+		showNoAction(touchPos);
+		return;
+	}
 
+
+
+
+	
+	//	If not then add the birds
+	switch (rank)
+	{
+		case 5:
+			b = BirdDuke::create();
+			break;
+		default:
+			b = Bird::create();			
+	}
 
 	b->setPosition(touchPos);
 	this->addChild(b);
-	
+
+	//	Add birds to limiter
+	birds[memoryRank]--;
 	
 	//	Set to correct position
 	touchPos.y = levelLines[total - rank];
-	b->runAction(CCEaseIn::create(CCMoveTo::create(0.5, touchPos), 1));
-	
-
+	b->runAction(CCEaseIn::create(CCMoveTo::create(0.5, touchPos), 1));	
 }
+
 
 int MainScene::getRank(CCPoint pos)
 {
@@ -163,11 +180,60 @@ int MainScene::getRank(CCPoint pos)
 	return ret;
 }
 
-void MainScene::removeItemAction(CCNode* node)
+Bird* MainScene::getBirdAtPosition(CCPoint pos)
 {
-	node->removeFromParentAndCleanup(true);
-	//CC_SAFE_DELETE(node);
+	CCArray* children = this->getChildren();
+	for (unsigned int i = 0; i < children->count(); i++)
+	{
+		CCObject* child = children->objectAtIndex(i);
+		Bird* ret = dynamic_cast<Bird*>(child);
+		if (!ret)
+			continue;
+		
+		//	Check if in position
+		CCSize size = ret->sprite->getContentSize();
+		CCPoint ps = ret->getPosition();
+
+		CCRect rect = CCRectMake(ps.x, ps.y, size.width, size.height);
+		//rect.origin.setPoint(0.5, 0);
+		//ps.x += size.width / 2;
+		rect.origin.x -= size.width / 2;
+
+		/*
+		`*****
+		******
+		
+		******
+		**`***
+		*/
+
+
+		if (rect.containsPoint(pos))
+			return ret;
+	}
+
+
+	return NULL;
 }
+
+void MainScene::removeItemAction(CCNode* node, void* ptr)
+{
+	CCNode* ob = ptr != NULL ? (CCNode*) ptr : node;
+	
+	if (ob)
+		ob->removeFromParentAndCleanup(true);			
+}
+
+void MainScene::fadeToDeath(Bird* node)
+{
+	CCCallFuncN *callfuncn = CCCallFuncND::create(this, callfuncND_selector(MainScene::removeItemAction), node);	
+	CCFadeOut* f = CCFadeOut::create(0.5f);
+	CCSequence* s = CCSequence::createWithTwoActions(f, callfuncn);
+	node->dying = true;
+
+	node->sprite->runAction(s);
+}
+
 
 void MainScene::showNoAction(CCPoint pos)
 {
@@ -176,7 +242,7 @@ void MainScene::showNoAction(CCPoint pos)
 	this->addChild(no);		
 
 	CCFadeTo* hide = CCFadeTo::create(0.5f, 0);
-	CCCallFuncN * remove = CCCallFuncN::create(this, callfuncN_selector(MainScene::removeItemAction));
+	CCCallFuncN * remove = CCCallFuncND::create(this, callfuncND_selector(MainScene::removeItemAction), NULL);
 
 	no->runAction(CCSequence::createWithTwoActions(hide, remove));
 }

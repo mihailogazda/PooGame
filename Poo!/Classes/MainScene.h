@@ -16,10 +16,14 @@
 
 using namespace cocos2d;
 
+static const int levelSize = 6;
+
+class Bird;
+
 ///
 ///	Line positions
 ///
-static const int levelLines[] = 
+static const int levelLines[levelSize] = 
 {
 	501,
 	386,
@@ -29,14 +33,13 @@ static const int levelLines[] =
 	NULL
 };
 
-static const int levelLimits[] = 
+static const int levelLimits[levelSize] = 
 {
 	0,
 	3,
 	5,
 	7,
-	10,
-	15,
+	10,	
 	0
 };
 
@@ -46,8 +49,28 @@ class MainScene : public cocos2d::CCLayer
 {
 private:
 
-	void showNoAction(CCPoint pos);
+	//	Gets rank from 0 to levelSize (1 - lowest)
 	int getRank(CCPoint pos);
+
+	//	Bird at position
+	Bird* getBirdAtPosition(CCPoint pos);
+
+	//	Shows error currsor (animated)
+	void showNoAction(CCPoint pos);
+
+
+	//	Callfunc actions
+	void removeItemAction(CCNode* node, void* ptr = NULL);
+	void fadeToDeath(Bird* node);
+	
+	//	Private storage for level limits
+	int birds[levelSize];
+
+	MainScene()
+	{
+		//	Copy settings
+		memcpy(birds, levelLimits, sizeof(birds));
+	}
 
 public:
     // Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
@@ -56,8 +79,7 @@ public:
     // there's no 'id' in cpp, so we recommand to return the exactly class pointer
     static cocos2d::CCScene* scene();
 
-	//	Callfunc action
-	void removeItemAction(CCNode* node);
+
 
 	static cocos2d::CCScene* shared();
     
