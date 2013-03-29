@@ -37,7 +37,7 @@ del Resources\*.* /f /q
 rd Resources /S /Q
 
 REM Pack Shortcuts
-xcopy ..\Start.bat *.*
+xcopy ..\_start.bat *.*
 %@zipCommand% "*.bat"
 del *.bat /f /q
 
