@@ -49,6 +49,9 @@
     <ClInclude Include="resource.h">
       <Filter>include\support</Filter>
     </ClInclude>
+    <ClInclude Include="..\External\Morph\MorphSprite.h">
+      <Filter>include\support</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Classes\MainScene.cpp">
@@ -64,6 +67,9 @@
       <Filter>source\support</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\AppDelegate.cpp">
+      <Filter>source\support</Filter>
+    </ClCompile>
+    <ClCompile Include="..\External\Morph\MorphSprite.cpp">
       <Filter>source\support</Filter>
     </ClCompile>
   </ItemGroup>

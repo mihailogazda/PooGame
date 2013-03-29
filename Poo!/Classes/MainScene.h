@@ -2,6 +2,9 @@
 #define __HELLOWORLD_SCENE_H__
 
 #include "cocos2d.h"
+#include "SimpleAudioEngine.h"
+#include "Bird.h"
+#include "MorphSprite.h"
 
 #ifdef ENABLE_BOX2D
 
@@ -9,10 +12,6 @@
 	#pragma comment (lib, "libBox2d.lib")
 
 #endif
-
-#include "SimpleAudioEngine.h"
-
-#include "Bird.h"
 
 using namespace cocos2d;
 

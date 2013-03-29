@@ -52,7 +52,9 @@ bool MainScene::init()
 
 
         // 3. Add add a splash screen, show the cocos2d splash image.
-        CCSprite* pSprite = CCSprite::create("background.png");
+		CCSprite* pSprite = MorphSprite::create("background.png", "./Shaders/static_tv_outline.fsh");
+		if (!pSprite)
+			pSprite = CCSprite::create("background.png");
         CC_BREAK_IF(! pSprite);
 
         // Place the sprite on the center of the screen

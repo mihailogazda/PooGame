@@ -3,7 +3,7 @@
 
 #include "cocos2d.h"
 #include "MainScene.h"
-#include "BirdDropping.h"
+#include "BirdPoo.h"
 
 enum BirdType 
 {
