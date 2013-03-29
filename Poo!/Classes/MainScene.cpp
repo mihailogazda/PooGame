@@ -85,6 +85,10 @@ void MainScene::ccTouchesBegan(CCSet* pTouches, CCEvent* pEvent)
 {
 	CCPoint touchPos = getTouchPos(pTouches);
 	selected = getBirdAtPosition(touchPos);
+
+	if (selected && selected->dying)
+		selected = NULL;
+
 	if (selected)
 		originalPos = selected->getPosition();
 }
@@ -119,7 +123,7 @@ void MainScene::ccTouchesMoved(CCSet* touches, CCEvent* event)
 void MainScene::ccTouchesEnded(CCSet* pTouches, CCEvent* pEvent)
 {	
 	if (selected)
-	{		
+	{
 		CCPoint diff = ccpSub(selected->getPosition(), originalPos);
 		selected = NULL;
 
