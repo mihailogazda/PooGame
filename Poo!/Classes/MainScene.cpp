@@ -53,7 +53,7 @@ bool MainScene::init()
 
         // 3. Add add a splash screen, show the cocos2d splash image.
 		CCSprite* pSprite = NULL;
-		pSprite = MorphSprite::create("background.png", "./Shaders/clod.fsh");
+		pSprite = MorphSprite::create("background.png", "./Shaders/static_tv_outline.fsh");
 		if (!pSprite)
 			pSprite = CCSprite::create("background.png");
         CC_BREAK_IF(! pSprite);
@@ -119,6 +119,7 @@ void MainScene::ccTouchesMoved(CCSet* touches, CCEvent* event)
 	diff.y = 0;	//	no movement on Y axis	
 
 	CCPoint loc = ccpAdd(selected->getPosition(), diff);
+	loc.x = clampX(loc.x);
 	selected->setPosition(loc);
 	
 }
@@ -136,12 +137,11 @@ void MainScene::ccTouchesEnded(CCSet* pTouches, CCEvent* pEvent)
 	}
 	
 	CCPoint touchPos = getTouchPos(pTouches);
-	
 
 	//	get rank in visual and memory
 	int total = levelSize;
 	int rank = getRank(touchPos);
-	int memoryRank = total/* + 1*/ - rank;
+	int memoryRank = total/* + 1*/ - rank;	
 	
 	//	Check if its in the King area or in empty - block it
 	if ( rank <= 1 || rank == levelSize)
@@ -198,10 +198,21 @@ void MainScene::ccTouchesEnded(CCSet* pTouches, CCEvent* pEvent)
 	birds[memoryRank]--;
 	
 	//	Set to correct position
+	touchPos.x = clampX(touchPos.x);
 	touchPos.y = levelLines[total - rank];
+
+	//	Move
 	b->runAction(CCEaseIn::create(CCMoveTo::create(0.5, touchPos), 1));	
 }
 
+int MainScene::clampX(int x)
+{
+	float r = 0;
+	CCSize size = CCDirector::sharedDirector()->getWinSizeInPixels();
+	r = max(sceneMargin, x);
+	r = min(size.width - sceneMargin, r);
+	return r;
+}
 
 int MainScene::getRank(CCPoint pos)
 {
@@ -232,9 +243,7 @@ Bird* MainScene::getBirdAtPosition(CCPoint pos)
 		CCSize size = ret->sprite->getContentSize();
 		CCPoint ps = ret->getPosition();
 
-		CCRect rect = CCRectMake(ps.x, ps.y, size.width, size.height);
-		//rect.origin.setPoint(0.5, 0);
-		//ps.x += size.width / 2;
+		CCRect rect = CCRectMake(ps.x, ps.y, size.width, size.height);		
 		rect.origin.x -= size.width / 2;
 
 		/*

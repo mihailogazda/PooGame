@@ -60,6 +60,9 @@ private:
 	//	Shows error currsor (animated)
 	void showNoAction(CCPoint pos);
 
+	int clampX(int pos);
+
+	static const int sceneMargin = 30;
 
 	//	Callfunc actions
 	void removeItemAction(CCNode* node, void* ptr = NULL);
