@@ -54,6 +54,9 @@ private:
 
 	//	Bird at position
 	Bird* getBirdAtPosition(CCPoint pos);
+	Bird* selected;
+	
+	CCPoint originalPos;
 
 	//	Shows error currsor (animated)
 	void showNoAction(CCPoint pos);
@@ -62,6 +65,8 @@ private:
 	//	Callfunc actions
 	void removeItemAction(CCNode* node, void* ptr = NULL);
 	void fadeToDeath(Bird* node);
+
+	CCPoint getTouchPos(CCSet* touches);
 	
 	//	Private storage for level limits
 	int birds[levelSize];
@@ -70,6 +75,8 @@ private:
 	{
 		//	Copy settings
 		memcpy(birds, levelLimits, sizeof(birds));
+		selected = NULL;
+		originalPos = CCPointZero;
 	}
 
 public:

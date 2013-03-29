@@ -81,21 +81,55 @@ bool MainScene::init()
     return bRet;
 }
 
-void MainScene::ccTouchesBegan(CCSet* touches, CCEvent* pEvent)
+void MainScene::ccTouchesBegan(CCSet* pTouches, CCEvent* pEvent)
 {
+	CCPoint touchPos = getTouchPos(pTouches);
+	selected = getBirdAtPosition(touchPos);
+	if (selected)
+		originalPos = selected->getPosition();
+}
+
+CCPoint MainScene::getTouchPos(CCSet* pTouches)
+{
+	CCTouch* touch = (CCTouch*) pTouches->anyObject();
+	CCPoint touchPos = touch->getLocationInView();
+	//	Invert Y
+	touchPos.y = CCDirector::sharedDirector()->getWinSizeInPixels().height - touchPos.y;
+	return touchPos;
 }
 
 void MainScene::ccTouchesMoved(CCSet* touches, CCEvent* event)
 {
+	if (!selected)
+		return;
+
+	CCTouch* touch = (CCTouch*) touches->anyObject();
+
+	CCPoint prevLoc = touch->getPreviousLocationInView();
+	CCPoint newLoc = touch->getLocationInView();
+
+	CCPoint diff = ccpSub(newLoc, prevLoc);
+	diff.y = 0;	//	no movement on Y axis	
+
+	CCPoint loc = ccpAdd(selected->getPosition(), diff);
+	selected->setPosition(loc);
+	
 }
 
 void MainScene::ccTouchesEnded(CCSet* pTouches, CCEvent* pEvent)
 {	
-	CCTouch* touch = (CCTouch*) pTouches->anyObject();
-	CCPoint touchPos = touch->getLocationInView();
+	if (selected)
+	{		
+		CCPoint diff = ccpSub(selected->getPosition(), originalPos);
+		selected = NULL;
 
-	//	Invert Y
-	touchPos.y = CCDirector::sharedDirector()->getWinSizeInPixels().height - touchPos.y;
+		//	do nothing if moved
+		if (abs(diff.x) >= 2)
+			return;
+	}
+	
+	CCPoint touchPos = getTouchPos(pTouches);
+	
 
 	//	get rank in visual and memory
 	int total = levelSize;
@@ -138,9 +172,6 @@ void MainScene::ccTouchesEnded(CCSet* pTouches, CCEvent* pEvent)
 		showNoAction(touchPos);
 		return;
 	}
-
-
-
 
 	
 	//	If not then add the birds
