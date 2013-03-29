@@ -13,6 +13,12 @@
       <UniqueIdentifier>{fb4e6de9-7a77-4cc4-987f-fe4143a8aba8}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;jpg;jpeg;jpe;png;manifest</Extensions>
     </Filter>
+    <Filter Include="include\support">
+      <UniqueIdentifier>{ce59b256-0a71-4a1d-a3c9-a3dc57066907}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\support">
+      <UniqueIdentifier>{a4e2c56a-7e44-4fdb-b70d-97472681fdae}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\Poo!.ico">
@@ -25,34 +31,40 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="resource.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="main.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\AppDelegate.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\MainScene.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Bird.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\BirdPoo.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\AppDelegate.h">
+      <Filter>include\support</Filter>
+    </ClInclude>
+    <ClInclude Include="main.h">
+      <Filter>include\support</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>include\support</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\AppDelegate.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\MainScene.cpp">
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\Bird.cpp">
       <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\BirdPoo.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>source\support</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\AppDelegate.cpp">
+      <Filter>source\support</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

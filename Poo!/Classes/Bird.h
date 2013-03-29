@@ -2,8 +2,8 @@
 #define _BIRD_H_
 
 #include "cocos2d.h"
-#include <MainScene.h>
-
+#include "MainScene.h"
+#include "BirdDropping.h"
 
 enum BirdType 
 {
