@@ -1,43 +1,43 @@
+
+
 #ifdef GL_ES
-precision mediump float;
+precision highp float;
 #endif
 
-varying vec2 v_texCoord;
-uniform sampler2D u_texture;
+vec2 resolution = vec2(800, 600);
 uniform float u_time;
+uniform sampler2D u_texture;
+varying vec2 v_texCoord;
 
-//random function
-float rand(vec2 co){
-    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
-}
 
-void main()
+void main(void)
 {
-    vec4 m_color=texture2D(u_texture, v_texCoord).rgba;
+	vec4 m_color=texture2D(u_texture, v_texCoord).rgba;
 	gl_FragColor = m_color;
-	return;	//	kill shader
+	return; // kill shader
 
-    if(m_color.a<.5){
-        gl_FragColor = m_color;
-        return;
-    }
+    vec2 q = gl_FragCoord.xy / resolution.xy;
+    vec2 uv = 0.5 + (q-0.5)*(0.9 + 0.1*sin(0.2*u_time));
 
-    float r, g;
-    float t=u_time;
-    
-    int tint=int(t);    
-    
-    if (t>1.)
-        t-=float(tint);
-    t*=2.;
-    
-    if (t>1.)
-        t=2.-t;
-    
-    t+=1.;
-    r=rand(v_texCoord-t*t);
-    g=rand(v_texCoord+t*t*t);
-    float color=max(r,g);
-    gl_FragColor = vec4(color,color,color,1);
-    
+    vec3 oricol = texture2D(u_texture,vec2(q.x,1.0-q.y)).xyz;
+    vec3 col;
+
+    col.r = texture2D(u_texture,vec2(uv.x+0.003,-uv.y)).x;
+    col.g = texture2D(u_texture,vec2(uv.x+0.000,-uv.y)).y;
+    col.b = texture2D(u_texture,vec2(uv.x-0.003,-uv.y)).z;
+
+    col = clamp(col*0.5+0.5*col*col*1.2,0.0,1.0);
+
+    //col *= 0.5 + 0.5*16.0*uv.x*uv.y*(1.0-uv.x)*(1.0-uv.y);
+
+    //col *= vec3(0.8,1.0,0.7);
+
+    col *= 0.9+0.1*sin(10.0*u_time+uv.y*1000.0);
+
+    col *= 0.97+0.03*sin(110.0*u_time);
+
+    float comp = smoothstep( 0.2, 0.7, sin(u_time) );
+    //col = mix( col, oricol, clamp(-2.0+2.0*q.x+3.0*comp,0.0,1.0) );
+
+    gl_FragColor = vec4(col,1.0);
 }
