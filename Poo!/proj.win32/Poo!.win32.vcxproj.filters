@@ -19,6 +19,12 @@
     <Filter Include="source\support">
       <UniqueIdentifier>{a4e2c56a-7e44-4fdb-b70d-97472681fdae}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\external">
+      <UniqueIdentifier>{5807c904-cd6c-4ba5-8c68-d25220eb3303}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\external">
+      <UniqueIdentifier>{b1b59c67-e8c2-4c6a-90d1-a192889a8bad}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\Poo!.ico">
@@ -50,7 +56,7 @@
       <Filter>include\support</Filter>
     </ClInclude>
     <ClInclude Include="..\External\Morph\MorphSprite.h">
-      <Filter>include\support</Filter>
+      <Filter>include\external</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -70,7 +76,7 @@
       <Filter>source\support</Filter>
     </ClCompile>
     <ClCompile Include="..\External\Morph\MorphSprite.cpp">
-      <Filter>source\support</Filter>
+      <Filter>source\external</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
