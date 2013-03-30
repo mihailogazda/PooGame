@@ -30,6 +30,11 @@ private:
 	//	Layer that holds birds and poo's
 	CCLayer* gameContent;
 
+	//	Points and score
+	bool wasInitiated;
+	int points;
+
+
 	CCPoint originalPos;
 
 	//	Shows error currsor (animated)
@@ -64,6 +69,9 @@ private:
 		selected = NULL;
 		originalPos = CCPointZero;
 		gameContent = NULL;
+
+		points = 0;
+		wasInitiated = false;
 	}
 
 public:

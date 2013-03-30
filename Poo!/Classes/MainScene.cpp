@@ -94,6 +94,12 @@ void MainScene::createKing()
 void MainScene::doSplat(CCObject* button)
 {
 	theKing->dropPoo();
+	wasInitiated = true;
+	
+	CCMenuItemFont* f = dynamic_cast<CCMenuItemFont*>(button);
+	if (f)
+		f->setEnabled(false);
+
 }
 
 void MainScene::createMenu()
@@ -279,6 +285,8 @@ void MainScene::update(float delta)
 	CCLog("Scene update");
 
 	CCArray* children = this->gameContent->getChildren();
+	int pooCount = 0;
+
 	for (unsigned int i =0; i < children->count(); i++)
 	{
 		CCLayer *l = dynamic_cast<CCLayer*>(children->objectAtIndex(i));
@@ -286,11 +294,16 @@ void MainScene::update(float delta)
 
 		if (p)
 		{
+			pooCount++;
+
 			CCPoint pooPos = p->getPosition();			
 			Bird* b = getBirdAtPosition(pooPos);
 
 			if (b && !b->isHit())
 			{
+				//	Counter
+				points++;
+
 				//	Found hit item - color it
 				b->hit();
 
@@ -301,7 +314,21 @@ void MainScene::update(float delta)
 				p->removeFromParentAndCleanup(true);
 			}
 		}
+	}
 
+
+	if (pooCount == 0 && wasInitiated)
+	{
+		//	Its all done
+		char text[500] = {0};
+		char note[200] = {0};
+
+		sprintf_s(text, "You won %d points!\r\n%s", points, note);
+
+
+		MessageBox(CCEGLView::sharedOpenGLView()->getHWnd(), text, "Score", MB_OK | MB_ICONINFORMATION);
+
+		CCDirector::sharedDirector()->replaceScene(MainScene::scene());
 	}
 
 }
