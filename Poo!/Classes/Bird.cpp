@@ -49,8 +49,11 @@ bool Bird::init()
 
 void Bird::dropPoo()
 {
-	PooType type = getPooType();	
-	BirdPoo *poo = BirdPoo::create(type);
+	int rank = Settings::shared()->memoryRankFromPosition(this->getPosition());	
+	int p = Settings::shared()->lineForPosition(rank + 1);
+
+	PooType type = getPooType();
+	BirdPoo *poo = BirdPoo::create(type, p);
 
 	CCPoint pos = this->getPosition();
 	pos.y -= 20;

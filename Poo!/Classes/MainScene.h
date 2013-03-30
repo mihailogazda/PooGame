@@ -22,10 +22,7 @@ class BirdKing;
 class MainScene : public cocos2d::CCLayer
 {
 private:
-
-	//	Gets rank from 0 to levelSize (1 - lowest)
-	int getRank(CCPoint pos);
-
+	
 	//	Bird at position
 	Bird* getBirdAtPosition(CCPoint pos);
 	Bird* selected;

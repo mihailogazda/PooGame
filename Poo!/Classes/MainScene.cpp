@@ -167,7 +167,7 @@ void MainScene::ccTouchesEnded(CCSet* pTouches, CCEvent* pEvent)
 
 	//	get rank in visual and memory
 	int total = settings->levelSize();
-	int rank = getRank(touchPos);
+	int rank = settings->rankFromPosition(touchPos);
 	int memoryRank = total/* + 1*/ - rank;	
 	
 	//	Check if its in the King area or in empty - block it
@@ -239,20 +239,7 @@ int MainScene::clampX(int x)
 	return r;
 }
 
-int MainScene::getRank(CCPoint pos)
-{
-	int total = Settings::shared()->levelSize();
-	int ret = total;
-	for (int i = total - 1; i >= 0; i--)
-	{
-		if (pos.y <= Settings::shared()->lineForPosition(i))
-		{
-			ret = (total - 1) - i;
-			break;
-		}
-	}
-	return ret;
-}
+
 
 Bird* MainScene::getBirdAtPosition(CCPoint pos)
 {

@@ -25,6 +25,11 @@ public:
 	void level(void* memory, unsigned int *size);
 	void limits(void* memory, unsigned int *size);
 
+	int rankFromPosition(cocos2d::CCPoint pos);
+	int memoryRankFromPosition(cocos2d::CCPoint pos);
+
+	bool itemOutOfSight(cocos2d::CCNode* item);
+
 };
 
 

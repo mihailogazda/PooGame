@@ -2,6 +2,7 @@
 #define _BIRD_POO_H_
 
 #include "cocos2d.h"
+#include "Settings.h"
 
 enum PooType
 {

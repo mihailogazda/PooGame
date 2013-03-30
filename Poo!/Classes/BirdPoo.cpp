@@ -44,10 +44,10 @@ void BirdPoo::update(float delta)
 			posY -= speed;
 			break;
 		case PooDirectionLeft:
-			posY -= speed;
+			posX -= speed;
 			break;
 		case PooDirectionRight:
-			posY += speed;				
+			posX += speed;				
 	}
 
 	//	Set position
@@ -55,6 +55,13 @@ void BirdPoo::update(float delta)
 
 	if (isOutOfBorder())
 		split();
+
+	if (Settings::shared()->itemOutOfSight(this))
+	{
+		CCLog("BirdPoo out of sight and killed");
+		this->removeFromParentAndCleanup(true);
+	}
+
 }
 
 bool BirdPoo::isOutOfBorder()
@@ -71,5 +78,20 @@ bool BirdPoo::isOutOfBorder()
 
 void BirdPoo::split()
 {
+	//	Separate to two new ones
+	BirdPoo* left = BirdPoo::create(type, 0, PooDirectionLeft);
+	BirdPoo* right = BirdPoo::create(type, 0, PooDirectionRight);
 
+	CCPoint pos = this->getPosition();
+	pos.y += 10;
+
+	left->setPosition(pos);		
+	right->setPosition(pos);
+
+	this->getParent()->addChild(left);
+	this->getParent()->addChild(right);
+
+
+	//	Remove myself
+	this->removeFromParentAndCleanup(true);
 }

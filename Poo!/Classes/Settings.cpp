@@ -90,4 +90,43 @@ void Settings::limits(void* level, unsigned int* size)
 	memcpy(level, levelLimits, *size);
 }
 
+int Settings::rankFromPosition(CCPoint pos)
+{
+	int total = Settings::shared()->levelSize();
+	int ret = total;
+	for (int i = total - 1; i >= 0; i--)
+	{
+		if (pos.y <= lineForPosition(i))
+		{
+			ret = (total - 1) - i;
+			break;
+		}
+	}
+	return ret;
+}
+
+int Settings::memoryRankFromPosition(CCPoint pos)
+{
+	int re = rankFromPosition(pos);
+	if (re == 0)
+		return 0;
+
+	return min(_levelSize - re - 1, 0);
+}
+
+bool Settings::itemOutOfSight(CCNode* item)
+{	
+	CCNode* WorldLayer = CCDirector::sharedDirector()->getRunningScene();
+	if (WorldLayer)
+	{
+		CCSize screen = this->screenSize();
+		CCPoint pos = WorldLayer->convertToWorldSpace(item->getPosition());
+		
+		if (pos.x >= screen.width || pos.x <= 0 || pos.y >= screen.height || pos.y <= 0)
+			return true;
+	}
+
+	return false;
+}
+
 #pragma endregion
