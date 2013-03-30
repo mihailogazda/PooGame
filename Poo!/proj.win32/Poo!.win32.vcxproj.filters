@@ -58,6 +58,9 @@
     <ClInclude Include="..\External\Morph\MorphSprite.h">
       <Filter>include\external</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\Settings.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Classes\MainScene.cpp">
@@ -77,6 +80,9 @@
     </ClCompile>
     <ClCompile Include="..\External\Morph\MorphSprite.cpp">
       <Filter>source\external</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Settings.cpp">
+      <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

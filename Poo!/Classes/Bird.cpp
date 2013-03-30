@@ -1,5 +1,7 @@
 #include "Bird.h"
 
+using namespace cocos2d;
+
 bool Bird::init()
 {
 	do
@@ -43,4 +45,21 @@ bool Bird::init()
 	while (false);
 
 	return false;
+}
+
+void Bird::dropPoo()
+{
+	PooType type = getPooType();	
+	BirdPoo *poo = BirdPoo::create(type);
+
+	CCPoint pos = this->getPosition();
+	pos.y -= 20;
+
+	poo->setPosition(pos);
+	this->getParent()->addChild(poo);
+}
+
+PooType Bird::getPooType()
+{
+	return PooTypeRegular;
 }

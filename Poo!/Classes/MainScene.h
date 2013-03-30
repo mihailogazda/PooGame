@@ -5,6 +5,7 @@
 #include "SimpleAudioEngine.h"
 #include "Bird.h"
 #include "MorphSprite.h"
+#include "Settings.h"
 
 #ifdef ENABLE_BOX2D
 
@@ -15,34 +16,8 @@
 
 using namespace cocos2d;
 
-static const int levelSize = 6;
-
 class Bird;
-
-///
-///	Line positions
-///
-static const int levelLines[levelSize] = 
-{
-	501,
-	386,
-	272,
-	157,
-	43,
-	NULL
-};
-
-static const int levelLimits[levelSize] = 
-{
-	0,
-	3,
-	5,
-	7,
-	10,	
-	0
-};
-
-static const int lineThickness = 16;
+class BirdKing;
 
 class MainScene : public cocos2d::CCLayer
 {
@@ -71,12 +46,21 @@ private:
 	CCPoint getTouchPos(CCSet* touches);
 	
 	//	Private storage for level limits
-	int birds[levelSize];
+	int birds[MAX_LEVEL_SIZE];
+
+	void doSplat(CCObject* button);
+
+	void createMenu();
+
+	BirdKing* theKing;
+	void createKing();
 
 	MainScene()
 	{
 		//	Copy settings
-		memcpy(birds, levelLimits, sizeof(birds));
+		unsigned int size = sizeof(birds);
+		Settings::shared()->limits(birds, &size);
+
 		selected = NULL;
 		originalPos = CCPointZero;
 	}

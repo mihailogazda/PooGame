@@ -63,10 +63,13 @@ void MorphSprite::initShader(const char *fshFileName){
         program->initWithVertexShaderByteArray(ccPositionTextureA8Color_vert, fragmentSource);
         setShaderProgram(program);
         program->release();
+
         program->addAttribute(kCCAttributeNamePosition, kCCVertexAttrib_Position);
         program->addAttribute(kCCAttributeNameTexCoord, kCCVertexAttrib_TexCoords);        
         program->link();
+
         program->updateUniforms();
+
         _timeUniformLocation = glGetUniformLocation(program->getProgram(), "u_time");
         
         _touch1PositionXUniformLocation= glGetUniformLocation(program->getProgram(), "u_touch1PosX");

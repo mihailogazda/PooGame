@@ -11,6 +11,7 @@ enum PooType
 
 enum PooDirection
 {
+	PooDirectionCenter,
 	PooDirectionLeft,
 	PooDirectionRight
 };
@@ -25,21 +26,34 @@ class BirdPoo : public cocos2d::CCLayer
 private:
 
 	//	Holds image data
-	cocos2d::CCSprite* sprite;
+	cocos2d::CCSprite* sprite;	
 
-	BirdPoo()
+	BirdPoo(PooType t, int b, PooDirection dir) 
 	{
+		border = b;
+		sprite = NULL;
+		type = t;
+		direction = dir;
 	}
+
+	//	separates poo to two
+	void split();
 
 public:
 
+	int border;
 	PooDirection direction;
 	PooType type;
 	
 	//	init here
 	virtual bool init();	
+	virtual void update(float delta);
 
-	CREATE_FUNC(BirdPoo);
+	virtual bool isOutOfBorder();
+
+	//CREATE_FUNC(BirdPoo);
+	static BirdPoo* create(PooType t, int border = 0, PooDirection = PooDirectionCenter);
+
 };
 
 

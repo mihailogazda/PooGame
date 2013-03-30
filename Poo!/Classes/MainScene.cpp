@@ -53,7 +53,7 @@ bool MainScene::init()
 
         // 3. Add add a splash screen, show the cocos2d splash image.
 		CCSprite* pSprite = NULL;
-		pSprite = MorphSprite::create("background.png", "./Shaders/static_tv_outline.fsh");
+		pSprite = CCSprite::create("background.png");//MorphSprite::create("background.png", "./Shaders/static_tv_outline.fsh");
 		if (!pSprite)
 			pSprite = CCSprite::create("background.png");
         CC_BREAK_IF(! pSprite);
@@ -66,14 +66,10 @@ bool MainScene::init()
 		
 
 		//	Add king
-		Bird *b = BirdKing::create();				
-
-		float toX = size.width / 2;
-		float toY = levelLines[0];
-
-		b->setPosition(ccp(toX, toY));		
-		this->addChild(b);				
+		createKing();
 		
+		//	Add menu
+		createMenu();
 
 		//	Enable touch controls
 		this->setTouchEnabled(true);
@@ -82,6 +78,36 @@ bool MainScene::init()
     } while (0);
 
     return bRet;
+}
+
+void MainScene::createKing()
+{
+	CCSize size = CCDirector::sharedDirector()->getWinSizeInPixels();
+	theKing = BirdKing::create();				
+
+	float toX = size.width / 2;
+	float toY = Settings::shared()->lineForPosition(0);
+
+	theKing->setPosition(ccp(toX, toY));		
+	this->addChild(theKing);				
+}
+
+void MainScene::doSplat(CCObject* button)
+{
+	theKing->dropPoo();
+}
+
+void MainScene::createMenu()
+{
+	CCMenuItemFont *f = CCMenuItemFont::create("Splat!", this, menu_selector(MainScene::doSplat));
+
+	CCMenu *m = CCMenu::create(f, NULL);
+
+	CCSize size = CCDirector::sharedDirector()->getWinSizeInPixels();	
+	CCPoint pos = ccp(size.width - 60, size.height - 30);
+	m->setPosition(pos);
+
+	this->addChild(m);
 }
 
 void MainScene::ccTouchesBegan(CCSet* pTouches, CCEvent* pEvent)
@@ -137,14 +163,15 @@ void MainScene::ccTouchesEnded(CCSet* pTouches, CCEvent* pEvent)
 	}
 	
 	CCPoint touchPos = getTouchPos(pTouches);
+	Settings *settings = Settings::shared();
 
 	//	get rank in visual and memory
-	int total = levelSize;
+	int total = settings->levelSize();
 	int rank = getRank(touchPos);
 	int memoryRank = total/* + 1*/ - rank;	
 	
 	//	Check if its in the King area or in empty - block it
-	if ( rank <= 1 || rank == levelSize)
+	if ( rank <= 1 || rank == total)
 	{
 		showNoAction(touchPos);
 		return;
@@ -152,16 +179,14 @@ void MainScene::ccTouchesEnded(CCSet* pTouches, CCEvent* pEvent)
 	//	check for lines - block it
 	else
 	{
-		int i = 0;
-		while (levelLines[i] != NULL)
+		for (int i = 0; i < total; i++)
 		{
-			int pos = levelLines[i];
-			if (touchPos.y <= pos && touchPos.y >= pos - lineThickness)
-			{			
+			int pos = settings->lineForPosition(i);
+			if (touchPos.y <= pos && touchPos.y >= pos - settings->lineThickness())
+			{
 				showNoAction(touchPos);
 				return;
-			}
-			i++;
+			}			
 		}
 	}
 
@@ -199,7 +224,7 @@ void MainScene::ccTouchesEnded(CCSet* pTouches, CCEvent* pEvent)
 	
 	//	Set to correct position
 	touchPos.x = clampX(touchPos.x);
-	touchPos.y = levelLines[total - rank];
+	touchPos.y = Settings::shared()->lineForPosition(total - rank);
 
 	//	Move
 	b->runAction(CCEaseIn::create(CCMoveTo::create(0.5, touchPos), 1));	
@@ -216,11 +241,11 @@ int MainScene::clampX(int x)
 
 int MainScene::getRank(CCPoint pos)
 {
-	int total = sizeof(levelLines) / sizeof(levelLines[0]);
+	int total = Settings::shared()->levelSize();
 	int ret = total;
 	for (int i = total - 1; i >= 0; i--)
 	{
-		if (pos.y <= levelLines[i])
+		if (pos.y <= Settings::shared()->lineForPosition(i))
 		{
 			ret = (total - 1) - i;
 			break;

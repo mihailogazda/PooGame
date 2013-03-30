@@ -2,7 +2,6 @@
 #define _BIRD_H_
 
 #include "cocos2d.h"
-#include "MainScene.h"
 #include "BirdPoo.h"
 
 enum BirdType 
@@ -23,6 +22,8 @@ protected:
 	BirdType type;
 	cocos2d::CCSprite *m_sprite;
 
+	virtual PooType getPooType();
+
 	Bird()
 	{
 		type = BirdTypeRegular;
@@ -40,6 +41,8 @@ public:
 
 	virtual bool init();
 
+	virtual void dropPoo();
+
 	CREATE_FUNC(Bird);
 };
 
@@ -49,9 +52,11 @@ public:
 ///
 class BirdKing : public Bird
 {
+protected:
+	virtual PooType getPooType() { return PooTypeKing; }
 public:
-	BirdKing() : Bird() 
-	{ 
+	BirdKing() : Bird()
+	{
 		type = BirdTypeKing;
 	}
 	CREATE_FUNC(BirdKing);
