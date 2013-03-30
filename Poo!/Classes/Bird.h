@@ -23,6 +23,8 @@ protected:
 	BirdType type;
 	cocos2d::CCSprite *m_sprite;
 
+	bool m_isHit;
+
 	virtual PooType getPooType();
 
 	Bird()
@@ -30,6 +32,7 @@ protected:
 		type = BirdTypeRegular;
 		m_sprite = NULL;		
 		dying = false;
+		m_isHit = false;
 	}
 
 public:
@@ -41,6 +44,9 @@ public:
 	cocos2d::CCSprite* sprite;
 
 	virtual bool init();
+	
+	virtual void hit();
+	virtual bool isHit() { return m_isHit; }
 
 	virtual void dropPoo();
 

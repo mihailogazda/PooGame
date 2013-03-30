@@ -26,6 +26,8 @@ class BirdPoo : public cocos2d::CCLayer
 {
 private:
 
+	float timer;
+
 	//	Holds image data
 	cocos2d::CCSprite* sprite;	
 
@@ -35,6 +37,7 @@ private:
 		sprite = NULL;
 		type = t;
 		direction = dir;
+		timer = 0;
 	}
 
 	//	separates poo to two

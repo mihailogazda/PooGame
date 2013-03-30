@@ -22,10 +22,10 @@ static const int levelLines[_levelSize] =
 static const int levelLimits[_levelSize] = 
 {
 	0,
-	3,
-	5,
-	7,
-	10,	
+	2,
+	4,
+	6,
+	8,	
 	0
 };
 
@@ -111,7 +111,7 @@ int Settings::memoryRankFromPosition(CCPoint pos)
 	if (re == 0)
 		return 0;
 
-	return min(_levelSize - re - 1, 0);
+	return _levelSize - re - 1;
 }
 
 bool Settings::itemOutOfSight(CCNode* item)

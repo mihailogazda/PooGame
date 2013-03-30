@@ -40,16 +40,11 @@ bool MainScene::init()
     bool bRet = false;
     do 
     {
-        //////////////////////////////////////////////////////////////////////////
-        // super init first
-        //////////////////////////////////////////////////////////////////////////
-
+		// super init first
         CC_BREAK_IF(! CCLayer::init());
-
               
         // Get window size 
-        CCSize size = CCDirector::sharedDirector()->getWinSize();
-
+		CCSize size = Settings::shared()->screenSize();
 
         // 3. Add add a splash screen, show the cocos2d splash image.
 		CCSprite* pSprite = NULL;
@@ -63,7 +58,10 @@ bool MainScene::init()
 
         // Add the sprite to MainScene layer as a child layer.
         this->addChild(pSprite, 0);
-		
+
+		//	Create world content node
+		this->gameContent = CCLayer::create();
+		this->addChild(gameContent);
 
 		//	Add king
 		createKing();
@@ -73,6 +71,7 @@ bool MainScene::init()
 
 		//	Enable touch controls
 		this->setTouchEnabled(true);
+		this->scheduleUpdate();
 
         bRet = true;
     } while (0);
@@ -89,7 +88,7 @@ void MainScene::createKing()
 	float toY = Settings::shared()->lineForPosition(0);
 
 	theKing->setPosition(ccp(toX, toY));		
-	this->addChild(theKing);				
+	this->gameContent->addChild(theKing);				
 }
 
 void MainScene::doSplat(CCObject* button)
@@ -217,7 +216,7 @@ void MainScene::ccTouchesEnded(CCSet* pTouches, CCEvent* pEvent)
 	}
 
 	b->setPosition(touchPos);
-	this->addChild(b);
+	this->gameContent->addChild(b);
 
 	//	Add birds to limiter
 	birds[memoryRank]--;
@@ -243,7 +242,7 @@ int MainScene::clampX(int x)
 
 Bird* MainScene::getBirdAtPosition(CCPoint pos)
 {
-	CCArray* children = this->getChildren();
+	CCArray* children = this->gameContent->getChildren();
 	for (unsigned int i = 0; i < children->count(); i++)
 	{
 		CCObject* child = children->objectAtIndex(i);
@@ -273,6 +272,38 @@ Bird* MainScene::getBirdAtPosition(CCPoint pos)
 
 
 	return NULL;
+}
+
+void MainScene::update(float delta)
+{
+	CCLog("Scene update");
+
+	CCArray* children = this->gameContent->getChildren();
+	for (unsigned int i =0; i < children->count(); i++)
+	{
+		CCLayer *l = dynamic_cast<CCLayer*>(children->objectAtIndex(i));
+		BirdPoo *p = dynamic_cast<BirdPoo*>(l);
+
+		if (p)
+		{
+			CCPoint pooPos = p->getPosition();			
+			Bird* b = getBirdAtPosition(pooPos);
+
+			if (b && !b->isHit())
+			{
+				//	Found hit item - color it
+				b->hit();
+
+				//	Continue cascade
+				b->dropPoo();
+
+				//	Remove that poo that hit it
+				p->removeFromParentAndCleanup(true);
+			}
+		}
+
+	}
+
 }
 
 void MainScene::removeItemAction(CCNode* node, void* ptr)

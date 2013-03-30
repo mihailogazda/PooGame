@@ -34,8 +34,12 @@ bool BirdPoo::init()
 void BirdPoo::update(float delta)
 {
 	float speed = _pooSpeed;
-	float posX = this->getPositionX();
+	float posX = this->getPositionX();	
 	float posY = this->getPositionY();
+
+	timer += 6 * delta;
+	float rotation = sin(timer);
+	float rotation1 = abs(sin(timer));
 
 	//	Check direction
 	switch (direction)
@@ -45,17 +49,31 @@ void BirdPoo::update(float delta)
 			break;
 		case PooDirectionLeft:
 			posX -= speed;
+			rotation = rotation1;
 			break;
-		case PooDirectionRight:
-			posX += speed;				
+		case PooDirectionRight:			
+			posX += speed;
+			rotation = rotation1;
+			break;
 	}
 
 	//	Set position
 	this->setPosition(posX, posY);
 
+
+	//	Add some fancy effects (fancy meaning shitty in this case)
+	
+	
+
+	
+
+	this->setRotation(rotation);
+
+	//	If border is hit then split
 	if (isOutOfBorder())
 		split();
 
+	//	If out of sight then remove from map
 	if (Settings::shared()->itemOutOfSight(this))
 	{
 		CCLog("BirdPoo out of sight and killed");
@@ -90,7 +108,6 @@ void BirdPoo::split()
 
 	this->getParent()->addChild(left);
 	this->getParent()->addChild(right);
-
 
 	//	Remove myself
 	this->removeFromParentAndCleanup(true);

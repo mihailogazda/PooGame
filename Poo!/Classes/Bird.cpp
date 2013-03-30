@@ -66,3 +66,11 @@ PooType Bird::getPooType()
 {
 	return PooTypeRegular;
 }
+
+void Bird::hit()
+{
+	m_isHit = true;
+
+	//	highlight
+	sprite->setColor(ccc3(255, 0, 0));
+}

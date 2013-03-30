@@ -27,6 +27,9 @@ private:
 	Bird* getBirdAtPosition(CCPoint pos);
 	Bird* selected;
 	
+	//	Layer that holds birds and poo's
+	CCLayer* gameContent;
+
 	CCPoint originalPos;
 
 	//	Shows error currsor (animated)
@@ -60,6 +63,7 @@ private:
 
 		selected = NULL;
 		originalPos = CCPointZero;
+		gameContent = NULL;
 	}
 
 public:
@@ -68,10 +72,9 @@ public:
 
     // there's no 'id' in cpp, so we recommand to return the exactly class pointer
     static cocos2d::CCScene* scene();
-
-
-
 	static cocos2d::CCScene* shared();
+
+	virtual void update(float delta);
     
     // a selector callback
     void menuCloseCallback(CCObject* pSender);
