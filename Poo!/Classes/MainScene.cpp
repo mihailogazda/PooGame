@@ -91,6 +91,19 @@ void MainScene::createKing()
 	this->gameContent->addChild(theKing);				
 }
 
+void MainScene::doRestart(CCObject* button)
+{
+	//	Manual - ask the user
+	if (button != NULL)
+	{
+		if (MessageBox(CCEGLView::sharedOpenGLView()->getHWnd(), "Are you sure?", "Restart level?", MB_ICONQUESTION | MB_YESNO) != IDYES)
+			return;
+	}
+
+	wasInitiated = false;
+	CCDirector::sharedDirector()->replaceScene(CCTransitionFade::create(1, MainScene::scene()));
+}
+
 void MainScene::doSplat(CCObject* button)
 {
 	theKing->dropPoo();
@@ -102,26 +115,50 @@ void MainScene::doSplat(CCObject* button)
 
 }
 
+void MainScene::doToggleBlock(CCObject* button)
+{
+	CCMenuItemToggle* t = dynamic_cast<CCMenuItemToggle*>(button);
+	if (t)
+	{
+		CCLog("Toggle: %d", t->getSelectedIndex());
+	}
+}
+
 void MainScene::createMenu()
 {
 	CCMenuItemFont *f = CCMenuItemFont::create("Splat!", this, menu_selector(MainScene::doSplat));
+	CCMenuItemFont *f2 = CCMenuItemFont::create("Restart", this, menu_selector(MainScene::doRestart));
+	
+	CCMenuItemFont *fblock1 = CCMenuItemFont::create("Blocks");
+	CCMenuItemFont *fblock2 = CCMenuItemFont::create("Birds");
 
-	CCMenu *m = CCMenu::create(f, NULL);
+	crateToggler =  CCMenuItemToggle::createWithTarget(this, menu_selector(MainScene::doToggleBlock), fblock1, fblock2, NULL);
+	
+
+	f2->setScale(0.5f);
+	crateToggler->setScale(0.5f);
+
+	//	Create menu
+	CCMenu *m = CCMenu::create(f, f2, crateToggler, NULL);
 
 	CCSize size = CCDirector::sharedDirector()->getWinSizeInPixels();	
-	CCPoint pos = ccp(size.width - 60, size.height - 30);
+	CCPoint pos = ccp(size.width - 120, size.height - 30);
 	m->setPosition(pos);
 
+	m->alignItemsHorizontally();
 	this->addChild(m);
 }
 
 void MainScene::ccTouchesBegan(CCSet* pTouches, CCEvent* pEvent)
 {
 	CCPoint touchPos = getTouchPos(pTouches);
-	selected = getBirdAtPosition(touchPos);
+	Bird* selectedBird = Finder<Bird>::findAtPosition(touchPos, gameContent);
+	Block* selectedBlock = Finder<Block>::findAtPosition(touchPos, gameContent);
 
-	if (selected && selected->dying)
-		selected = NULL;
+	if (selectedBird && !selectedBird->dying)
+		selected = selectedBird;
+	if (selectedBlock)
+		selected = selectedBlock;
 
 	if (selected)
 		originalPos = selected->getPosition();
@@ -157,6 +194,9 @@ void MainScene::ccTouchesMoved(CCSet* touches, CCEvent* event)
 
 void MainScene::ccTouchesEnded(CCSet* pTouches, CCEvent* pEvent)
 {	
+	if (wasInitiated)
+		return;
+
 	if (selected)
 	{
 		CCPoint diff = ccpSub(selected->getPosition(), originalPos);
@@ -195,42 +235,61 @@ void MainScene::ccTouchesEnded(CCSet* pTouches, CCEvent* pEvent)
 		}
 	}
 
-	//	Check if bird exists if it does delete it
-	Bird *b = NULL;	
-	b = getBirdAtPosition(touchPos);
-	if (b && !b->dying)
+	
+	//	Check if crates or birds
+	CCLayer *b = NULL;	
+	if (crateToggler->getSelectedIndex() == 0)
 	{
-		fadeToDeath(b);
-		birds[memoryRank]++;
-		return;
+		b = Finder<Bird>::findAtPosition(touchPos, gameContent);
+		if (b && !((Bird*)b)->dying)
+		{
+			fadeToDeath((Bird*) b);
+			birds[memoryRank]++;
+			return;
+		}
+		else if (birds[memoryRank] <= 0)
+		{
+			showNoAction(touchPos);
+			return;
+		}
+	
+		//	If not then add the birds
+		switch (rank)
+		{
+			case 5:
+				b = BirdDuke::create();
+				break;
+			default:
+				b = Bird::create();			
+		}	
+
+		//	Add birds to limiter
+		birds[memoryRank]--;
 	}
-	else if (birds[memoryRank] <= 0)
+	else
 	{
-		showNoAction(touchPos);
-		return;
+		b = Finder<Block>::findAtPosition(touchPos, gameContent);
+		if (b)
+		{
+			b->removeFromParentAndCleanup(true);
+			return;
+		}
+
+		b = Block::create();
 	}
 
 	
-	//	If not then add the birds
-	switch (rank)
-	{
-		case 5:
-			b = BirdDuke::create();
-			break;
-		default:
-			b = Bird::create();			
-	}
+	if (!b)
+		return;
 
+	//	Set position and add
 	b->setPosition(touchPos);
 	this->gameContent->addChild(b);
 
-	//	Add birds to limiter
-	birds[memoryRank]--;
-	
 	//	Set to correct position
 	touchPos.x = clampX(touchPos.x);
 	touchPos.y = Settings::shared()->lineForPosition(total - rank);
-
+	
 	//	Move
 	b->runAction(CCEaseIn::create(CCMoveTo::create(0.5, touchPos), 1));	
 }
@@ -244,91 +303,62 @@ int MainScene::clampX(int x)
 	return r;
 }
 
-
-
-Bird* MainScene::getBirdAtPosition(CCPoint pos)
-{
-	CCArray* children = this->gameContent->getChildren();
-	for (unsigned int i = 0; i < children->count(); i++)
-	{
-		CCObject* child = children->objectAtIndex(i);
-		Bird* ret = dynamic_cast<Bird*>(child);
-		if (!ret)
-			continue;
-		
-		//	Check if in position
-		CCSize size = ret->sprite->getContentSize();
-		CCPoint ps = ret->getPosition();
-
-		CCRect rect = CCRectMake(ps.x, ps.y, size.width, size.height);		
-		rect.origin.x -= size.width / 2;
-
-		/*
-		`*****
-		******
-		
-		******
-		**`***
-		*/
-
-
-		if (rect.containsPoint(pos))
-			return ret;
-	}
-
-
-	return NULL;
-}
-
 void MainScene::update(float delta)
 {
-	CCLog("Scene update");
-
-	CCArray* children = this->gameContent->getChildren();
-	int pooCount = 0;
-
-	for (unsigned int i =0; i < children->count(); i++)
+	if (wasInitiated)
 	{
-		CCLayer *l = dynamic_cast<CCLayer*>(children->objectAtIndex(i));
-		BirdPoo *p = dynamic_cast<BirdPoo*>(l);
+		CCArray* children = this->gameContent->getChildren();
+		int pooCount = 0;
 
-		if (p)
+		for (unsigned int i =0; i < children->count(); i++)
 		{
-			pooCount++;
+			CCLayer *l = dynamic_cast<CCLayer*>(children->objectAtIndex(i));
+			BirdPoo *p = dynamic_cast<BirdPoo*>(l);
 
-			CCPoint pooPos = p->getPosition();			
-			Bird* b = getBirdAtPosition(pooPos);
-
-			if (b && !b->isHit())
+			if (p)
 			{
-				//	Counter
-				points++;
+				pooCount++;
 
-				//	Found hit item - color it
-				b->hit();
+				CCPoint pooPos = p->getPosition();			
+				Bird* b = Finder<Bird>::findAtPosition(pooPos, gameContent);
+				Block* bl = Finder<Block>::findAtPosition(pooPos, gameContent);
 
-				//	Continue cascade
-				b->dropPoo();
+				if (bl)
+				{
+					p->removeFromParentAndCleanup(true);
+					return;
+				}
 
-				//	Remove that poo that hit it
-				p->removeFromParentAndCleanup(true);
+				if (b && !b->isHit())
+				{
+					//	Counter
+					points++;
+
+					//	Found hit item - color it
+					b->hit();
+
+					//	Continue cascade
+					b->dropPoo();
+
+					//	Remove that poo that hit it
+					p->removeFromParentAndCleanup(true);
+				}
 			}
 		}
-	}
 
+		//	Check if shiting is over
+		if (pooCount == 0)
+		{
+			//	Its all done
+			char text[500] = {0};
+			char note[200] = {0};
 
-	if (pooCount == 0 && wasInitiated)
-	{
-		//	Its all done
-		char text[500] = {0};
-		char note[200] = {0};
+			sprintf_s(text, "You won %d points!\r\n%s", points, note);
 
-		sprintf_s(text, "You won %d points!\r\n%s", points, note);
+			MessageBox(CCEGLView::sharedOpenGLView()->getHWnd(), text, "Score", MB_OK | MB_ICONINFORMATION);
 
-
-		MessageBox(CCEGLView::sharedOpenGLView()->getHWnd(), text, "Score", MB_OK | MB_ICONINFORMATION);
-
-		CCDirector::sharedDirector()->replaceScene(MainScene::scene());
+			doRestart(NULL);
+		}
 	}
 
 }

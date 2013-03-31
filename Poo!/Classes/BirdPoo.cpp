@@ -38,8 +38,9 @@ void BirdPoo::update(float delta)
 	float posY = this->getPositionY();
 
 	timer += 6 * delta;
-	float rotation = sin(timer);
-	float rotation1 = abs(sin(timer));
+	float rotation = 0;//sin(timer);
+	float jumps = 2.8f;
+	float rotation1 = timer <= jumps ? abs(sin(timer) * 2) : timer <= jumps * 2 ? abs(sin(timer) * 1.5) : abs(sin(timer));
 
 	//	Check direction
 	switch (direction)
@@ -56,17 +57,12 @@ void BirdPoo::update(float delta)
 			rotation = rotation1;
 			break;
 	}
-
+	
 	//	Set position
 	this->setPosition(posX, posY);
 
 
-	//	Add some fancy effects (fancy meaning shitty in this case)
-	
-	
-
-	
-
+	//	Add some fancy effects (fancy meaning shitty in this case)			
 	this->setRotation(rotation);
 
 	//	If border is hit then split

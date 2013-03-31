@@ -61,6 +61,12 @@
     <ClInclude Include="..\Classes\Settings.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\Block.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\GameLayer.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Classes\MainScene.cpp">
@@ -82,6 +88,12 @@
       <Filter>source\external</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\Settings.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Block.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\GameLayer.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>

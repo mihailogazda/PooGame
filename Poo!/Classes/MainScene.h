@@ -4,6 +4,7 @@
 #include "cocos2d.h"
 #include "SimpleAudioEngine.h"
 #include "Bird.h"
+#include "Block.h"
 #include "MorphSprite.h"
 #include "Settings.h"
 
@@ -21,11 +22,9 @@ class BirdKing;
 
 class MainScene : public cocos2d::CCLayer
 {
-private:
-	
-	//	Bird at position
-	Bird* getBirdAtPosition(CCPoint pos);
-	Bird* selected;
+private:			
+
+	GameLayer* selected;
 	
 	//	Layer that holds birds and poo's
 	CCLayer* gameContent;
@@ -54,6 +53,11 @@ private:
 	int birds[MAX_LEVEL_SIZE];
 
 	void doSplat(CCObject* button);
+	void doRestart(CCObject*  button);
+
+	CCMenuItemToggle *crateToggler;
+	void doToggleBlock(CCObject* button);
+
 
 	void createMenu();
 
@@ -72,6 +76,8 @@ private:
 
 		points = 0;
 		wasInitiated = false;
+
+		crateToggler = NULL;
 	}
 
 public:

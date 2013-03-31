@@ -2,6 +2,7 @@
 #define _BIRD_H_
 
 #include "cocos2d.h"
+#include "GameLayer.h"
 #include "BirdPoo.h"
 #include "Settings.h"
 
@@ -16,12 +17,11 @@ enum BirdType
 ///
 ///	Bird class 
 ///
-class Bird : public cocos2d::CCLayer
+class Bird : public GameLayer
 {
 protected:
 	
-	BirdType type;
-	cocos2d::CCSprite *m_sprite;
+	BirdType type;	
 
 	bool m_isHit;
 
@@ -30,7 +30,6 @@ protected:
 	Bird()
 	{
 		type = BirdTypeRegular;
-		m_sprite = NULL;		
 		dying = false;
 		m_isHit = false;
 	}
@@ -40,8 +39,7 @@ public:
 	bool dying;
 
 	//	public size getter
-	cocos2d::CCSize size;
-	cocos2d::CCSprite* sprite;
+	cocos2d::CCSize size;	
 
 	virtual bool init();
 	
