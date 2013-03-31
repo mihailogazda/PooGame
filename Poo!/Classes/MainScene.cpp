@@ -161,7 +161,10 @@ void MainScene::ccTouchesBegan(CCSet* pTouches, CCEvent* pEvent)
 		selected = selectedBlock;
 
 	if (selected)
+	{
+		selected->setZOrder(10);
 		originalPos = selected->getPosition();
+	}
 }
 
 CCPoint MainScene::getTouchPos(CCSet* pTouches)
@@ -175,9 +178,10 @@ CCPoint MainScene::getTouchPos(CCSet* pTouches)
 
 void MainScene::ccTouchesMoved(CCSet* touches, CCEvent* event)
 {
-	if (!selected)
+	if (!selected || wasInitiated)
 		return;
 
+	//	Get Touches and move the sprite
 	CCTouch* touch = (CCTouch*) touches->anyObject();
 
 	CCPoint prevLoc = touch->getPreviousLocationInView();
@@ -189,16 +193,50 @@ void MainScene::ccTouchesMoved(CCSet* touches, CCEvent* event)
 	CCPoint loc = ccpAdd(selected->getPosition(), diff);
 	loc.x = clampX(loc.x);
 	selected->setPosition(loc);
-	
+
+	//	Color if on top
+	CCRect selectedR;
+	selectedR.size = selected->sprite->getContentSize();
+	selectedR.origin = selected->getPosition();
+
+	CCArray* children = gameContent->getChildren();
+	for (unsigned int i = 0; i < children->count(); i++)
+	{
+		GameLayer* layer = dynamic_cast<GameLayer*>(children->objectAtIndex(i));
+		if (!layer || layer == selected)
+			continue;
+		
+		CCRect r;
+		r.size = layer->sprite->getContentSize();
+		r.origin = layer->getPosition();
+
+		if (r.intersectsRect(selectedR))
+		{
+			selected->sprite->setColor(ccc3(255, 0, 0));	
+			break;
+		}
+		else
+			selected->sprite->setColor(ccc3(255, 255, 255));	
+
+
+	}
+
 }
 
 void MainScene::ccTouchesEnded(CCSet* pTouches, CCEvent* pEvent)
 {	
 	if (wasInitiated)
-		return;
+		return;	
 
 	if (selected)
 	{
+		if (selected->sprite->getColor().b == 0)
+		{
+			selected->runAction(CCMoveTo::create(1, originalPos));
+			selected->sprite->setColor(ccc3(255, 255, 255));
+			return;
+		}
+
 		CCPoint diff = ccpSub(selected->getPosition(), originalPos);
 		selected = NULL;
 
@@ -284,7 +322,7 @@ void MainScene::ccTouchesEnded(CCSet* pTouches, CCEvent* pEvent)
 
 	//	Set position and add
 	b->setPosition(touchPos);
-	this->gameContent->addChild(b);
+	this->gameContent->addChild(b, 10);
 
 	//	Set to correct position
 	touchPos.x = clampX(touchPos.x);
