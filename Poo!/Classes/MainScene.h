@@ -59,6 +59,7 @@ private:
 	void doToggleBlock(CCObject* button);
 
 
+	void createBackground();
 	void createMenu();
 
 	BirdKing* theKing;

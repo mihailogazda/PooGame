@@ -43,21 +43,9 @@ bool MainScene::init()
 		// super init first
         CC_BREAK_IF(! CCLayer::init());
               
-        // Get window size 
-		CCSize size = Settings::shared()->screenSize();
+		//	Create background
+		createBackground();
 
-        // 3. Add add a splash screen, show the cocos2d splash image.
-		CCSprite* pSprite = NULL;
-		pSprite = CCSprite::create("background.png");//MorphSprite::create("background.png", "./Shaders/static_tv_outline.fsh");
-		if (!pSprite)
-			pSprite = CCSprite::create("background.png");
-        CC_BREAK_IF(! pSprite);
-
-        // Place the sprite on the center of the screen
-        pSprite->setPosition(ccp(size.width/2, size.height/2));
-
-        // Add the sprite to MainScene layer as a child layer.
-        this->addChild(pSprite, 0);
 
 		//	Create world content node
 		this->gameContent = CCLayer::create();
@@ -77,6 +65,26 @@ bool MainScene::init()
     } while (0);
 
     return bRet;
+}
+
+void MainScene::createBackground()
+{
+	CCSprite* pSprite = NULL;
+	CCSize size = Settings::shared()->screenSize();
+	
+	pSprite = CCSprite::create("background.png");//MorphSprite::create("background.png", "./Shaders/static_tv_outline.fsh");    
+    pSprite->setPosition(ccp(size.width/2, size.height/2));    
+    this->addChild(pSprite, 0);
+
+	for (int i = 0; i < Settings::shared()->levelSize(); i++)
+	{
+		int posY = Settings::shared()->lineForPosition(i);
+		MorphSprite *g = MorphSprite::create("grass_down.png", "./Shaders/Bend_down.fsh");
+		g->setAnchorPoint(ccp(0, 1));
+		g->setPositionY(posY);
+
+		this->addChild(g);
+	}
 }
 
 void MainScene::createKing()
@@ -212,7 +220,7 @@ void MainScene::ccTouchesMoved(CCSet* touches, CCEvent* event)
 
 		if (r.intersectsRect(selectedR))
 		{
-			selected->sprite->setColor(ccc3(255, 0, 0));	
+			selected->sprite->setColor(ccc3(255, 0, 0));
 			break;
 		}
 		else
