@@ -67,6 +67,9 @@
     <ClInclude Include="..\Classes\GameLayer.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\Animation.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Classes\MainScene.cpp">
@@ -94,6 +97,9 @@
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\GameLayer.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Animation.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>

@@ -50,30 +50,12 @@ bool Bird::init()
 			sprintf(img, "%s/assetData.png", resourceAnim);
 			sprintf(map, "%s/assetData.plist", resourceAnim);
 
-			//	Add sprite frames
-			CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile(map, img);
-
-			//	Load dict
-			CCDictionary* dic = CCDictionary::createWithContentsOfFile(map);						
-			if (dic)
-			{
-				//	Load frames
-				CCArray* names = CCArray::create();
-				dic = (CCDictionary*) dic->objectForKey("frames");
-
-				CCDictElement* p = NULL;
-				CCDICT_FOREACH(dic, p)
-				{
-					const char* val = p->getStrKey();
-					CCSpriteFrame* fr = CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(val);
-					names->addObject(fr);
-				}
-				
-				//	Start animation
-				CCAnimation* an = CCAnimation::createWithSpriteFrames(names, 1.0/30);
-				sprite->runAction(CCRepeatForever::create(CCAnimate::create(an)));
-
-			}
+			animation = Animation::create(map, img);
+			if (animation)
+			{				
+				animation->start(this->sprite);
+				return true;
+			}			
 		}
 
 		return true;

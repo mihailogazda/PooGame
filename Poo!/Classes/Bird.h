@@ -4,6 +4,7 @@
 #include "cocos2d.h"
 #include "GameLayer.h"
 #include "BirdPoo.h"
+#include "Animation.h"
 #include "Settings.h"
 
 enum BirdType 
@@ -21,6 +22,7 @@ class Bird : public GameLayer
 {
 protected:
 	
+	Animation* animation;
 	BirdType type;	
 
 	bool m_isHit;
