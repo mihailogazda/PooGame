@@ -73,9 +73,6 @@ bool Bird::init()
 				CCAnimation* an = CCAnimation::createWithSpriteFrames(names, 1.0/30);
 				sprite->runAction(CCRepeatForever::create(CCAnimate::create(an)));
 
-				//	Adjust scale (for now - resources should be correct size)
-				sprite->setScale(0.6f);
-				
 			}
 		}
 
