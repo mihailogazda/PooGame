@@ -37,33 +37,37 @@ void BirdPoo::update(float delta)
 	float posX = this->getPositionX();	
 	float posY = this->getPositionY();
 
-	timer += 6 * delta;
-	float rotation = 0;//sin(timer);
-	float jumps = 2.8f;
-	float rotation1 = timer <= jumps ? abs(sin(timer) * 2) : timer <= jumps * 2 ? abs(sin(timer) * 1.5) : abs(sin(timer));
+	timer += delta;		
+	float jumps = 4;
+	float freq = 12;
+	float ampl = max(1, jumps / jumpCount);
+	float rotation = abs(sin(timer * freq))/* * ampl*/;
+
+	//float jmpEvent = abs(sin(timer * freq));
+	//if (jmpEvent <= 0.05f)
+	//	jumpCount++;
 
 	//	Check direction
 	switch (direction)
 	{
 		case PooDirectionCenter:
 			posY -= speed;
+			rotation = 0;
 			break;
 		case PooDirectionLeft:
-			posX -= speed;
-			rotation = rotation1;
+			posX -= speed;			
 			break;
 		case PooDirectionRight:			
-			posX += speed;
-			rotation = rotation1;
+			posX += speed;			
 			break;
 	}
 	
 	//	Set position
 	this->setPosition(posX, posY);
 
-
 	//	Add some fancy effects (fancy meaning shitty in this case)			
 	this->setRotation(rotation);
+	
 
 	//	If border is hit then split
 	if (isOutOfBorder())

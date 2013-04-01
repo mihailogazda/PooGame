@@ -12,8 +12,8 @@ uniform float u_touch1PosY;
 uniform float u_touch2PosX;
 uniform float u_touch2PosY;
 
-const float speed = 0.6;
-const float maxBendFactor = 0.1;
+const float speed = 0.5;
+const float maxBendFactor = 0.08;
 void main()
 {    
 	float bendFactor = maxBendFactor;//min(maxBendFactor, sin(u_time));
