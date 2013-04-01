@@ -2,9 +2,12 @@
 
 using namespace cocos2d;
 
-Animation* Animation::create(const char* map, const char* image)
+static const float defaultAnimationSpeed = 1.0/24;
+
+
+Animation* Animation::create(const char* map, const char* image, int repeat, float animationSpeed)
 {
-	Animation* m = new Animation(map, image);
+	Animation* m = new Animation(map, image, repeat, animationSpeed);
 	if (m && m->init())
 	{
 		m->autorelease();
@@ -42,9 +45,16 @@ bool Animation::init()
 		}
 		
 		//	Start animation
-		animation = CCAnimation::createWithSpriteFrames(names, 1.0/30);		
+		if (!animationSpeed)
+			animationSpeed = defaultAnimationSpeed;
+
+		animation = CCAnimation::createWithSpriteFrames(names, animationSpeed);		
 		animator = CCAnimate::create(animation);
-		repeater = CCRepeatForever::create(animator);
+
+		if (repeatCount == 0)
+			repeater = CCRepeatForever::create(animator);
+		else 
+			repeater = CCRepeat::create(animator, repeatCount);
 		
 		return true;
 	}

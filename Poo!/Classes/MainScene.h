@@ -65,6 +65,8 @@ private:
 	BirdKing* theKing;
 	void createKing();
 
+	void gameOver();
+
 	MainScene()
 	{
 		//	Copy settings

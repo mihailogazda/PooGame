@@ -78,6 +78,19 @@ void Bird::dropPoo()
 
 	poo->setPosition(pos);
 	this->getParent()->addChild(poo);
+
+	//	Poo animation
+	Animation* a = Animation::create("./Animations/poo/assetData.plist", "./Animations/poo/assetData.png", 1);	
+	CCSprite* s = CCSprite::create("poo.png");	
+	
+	pos.y += 10;
+	pos.x -= 5;
+	s->setAnchorPoint(ccp(0.5, 1));
+	s->setPosition(pos);
+	s->setScale(0.7f);
+
+	this->getParent()->addChild(s);
+	a->start(s);
 }
 
 PooType Bird::getPooType()

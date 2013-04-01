@@ -2,7 +2,9 @@
 
 using namespace cocos2d;
 
-float _pooSpeed = 5.0f;
+static const float _pooSpeed = 6.8f;
+
+static const bool pooVisible = false;
 
 BirdPoo* BirdPoo::create(PooType t, int border, PooDirection dir)
 {
@@ -23,8 +25,11 @@ bool BirdPoo::init()
 	if (!CCLayer::init())
 		return false;
 
-	sprite = CCSprite::create("poo.png");
-	this->addChild(sprite);	
+	if (pooVisible)
+	{
+		sprite = CCSprite::create("poo.png");
+		this->addChild(sprite);	
+	}
 
 	this->scheduleUpdate();
 

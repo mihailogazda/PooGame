@@ -110,7 +110,6 @@ void MainScene::createKing()
 	toX = width;
 	toY = Settings::shared()->lineForPosition(rank);	
 	
-	
 	for (int i = 0; i < total; i++)
 	{
 		Bird* b = Bird::create();
@@ -121,7 +120,7 @@ void MainScene::createKing()
 
 		this->gameContent->addChild(b);
 	}
-	
+
 }
 
 void MainScene::doRestart(CCObject* button)
@@ -138,8 +137,10 @@ void MainScene::doRestart(CCObject* button)
 }
 
 void MainScene::doSplat(CCObject* button)
-{
+{	
 	theKing->dropPoo();
+
+
 	wasInitiated = true;
 	
 	CCMenuItemFont* f = dynamic_cast<CCMenuItemFont*>(button);
@@ -420,18 +421,30 @@ void MainScene::update(float delta)
 		//	Check if shiting is over
 		if (pooCount == 0)
 		{
-			//	Its all done
-			char text[500] = {0};
-			char note[200] = {0};
+			//this->gameOver();
+			//return;
+			wasInitiated = false;
+			this->runAction(CCSequence::createWithTwoActions(
+				CCDelayTime::create(1.5f), 
+				CCCallFunc::create(this, callfunc_selector(MainScene::gameOver))
+			));
 
-			sprintf_s(text, "You won %d points!\r\n%s", points, note);
-
-			MessageBox(CCEGLView::sharedOpenGLView()->getHWnd(), text, "Score", MB_OK | MB_ICONINFORMATION);
-
-			doRestart(NULL);
 		}
 	}
 
+}
+
+void MainScene::gameOver()
+{	
+	//	Its all done
+	char text[500] = {0};
+	char note[200] = {0};
+
+	sprintf_s(text, "You won %d points!\r\n%s", points, note);
+
+	MessageBox(CCEGLView::sharedOpenGLView()->getHWnd(), text, "Score", MB_OK | MB_ICONINFORMATION);
+
+	doRestart(NULL);
 }
 
 void MainScene::removeItemAction(CCNode* node, void* ptr)

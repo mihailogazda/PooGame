@@ -18,17 +18,22 @@ private:
 
 	cocos2d::CCAnimate* animator;
 	cocos2d::CCAnimation* animation;	
-	cocos2d::CCRepeatForever* repeater;
+	cocos2d::CCAction* repeater;
+
+	int repeatCount;
+	float animationSpeed;
 
 public:
 
-	Animation(const char* map, const char* image)
+	Animation(const char* map, const char* image, int repeat = 0, float animationSpeed = 0)
 	{
 		this->map = map;
 		this->image = image;
+		this->repeatCount = repeat;
 		repeater = NULL;
 		animator = NULL;
 		animation = NULL;
+		this->animationSpeed = animationSpeed;
 	}
 
 	~Animation()
@@ -41,7 +46,7 @@ public:
 	virtual void start(cocos2d::CCNode* node);
 	virtual void stop();
 
-	static Animation* create(const char* map, const char* image);
+	static Animation* create(const char* map, const char* image, int repeat = 0, float animationSpeed = 0);
 
 };
 
