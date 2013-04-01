@@ -89,6 +89,7 @@ void MainScene::createBackground()
 
 void MainScene::createKing()
 {
+	//	First create the King
 	CCSize size = CCDirector::sharedDirector()->getWinSizeInPixels();
 	theKing = BirdKing::create();				
 
@@ -96,7 +97,30 @@ void MainScene::createKing()
 	float toY = Settings::shared()->lineForPosition(0);
 
 	theKing->setPosition(ccp(toX, toY));		
-	this->gameContent->addChild(theKing);				
+	this->gameContent->addChild(theKing);		
+
+
+	//	Then create the last row
+	int rank = Settings::shared()->levelSize() - 2;
+	int total = Settings::shared()->limitForLine(rank);
+	int width = theKing->sprite->getContentSize().width;
+	int margin = (size.width - (total * (width + 5) ) ) / total;
+
+	toX = width;
+	toY = Settings::shared()->lineForPosition(rank);	
+	
+	
+	for (int i = 0; i < total; i++)
+	{
+		Bird* b = Bird::create();
+		b->setPosition(toX, toY);
+
+		toX += margin + width;
+		this->birds[rank]--;
+
+		this->gameContent->addChild(b);
+	}
+	
 }
 
 void MainScene::doRestart(CCObject* button)

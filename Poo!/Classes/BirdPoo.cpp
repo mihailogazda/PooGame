@@ -38,14 +38,23 @@ void BirdPoo::update(float delta)
 	float posY = this->getPositionY();
 
 	timer += delta;		
-	float jumps = 4;
-	float freq = 12;
-	float ampl = max(1, jumps / jumpCount);
-	float rotation = abs(sin(timer * freq))/* * ampl*/;
+	float jumps = 3;
+	float freq = 10;	
+	float ampl = 42 / pow(jumpCount + 1, 2);
+	float rotation = abs(sin(timer * freq)) * ampl;
+	
+	float jmpEvent = abs(sin(timer * freq));
+	CCLog("rotation: %f", jmpEvent);
 
-	//float jmpEvent = abs(sin(timer * freq));
-	//if (jmpEvent <= 0.05f)
-	//	jumpCount++;
+	if (direction != PooDirectionCenter && jmpEvent <= 0.1f)
+		jumpCount++;
+
+	if (jumpCount == jumps)
+	{
+		this->removeFromParentAndCleanup(true);
+		return;
+	}
+
 
 	//	Check direction
 	switch (direction)
@@ -66,7 +75,9 @@ void BirdPoo::update(float delta)
 	this->setPosition(posX, posY);
 
 	//	Add some fancy effects (fancy meaning shitty in this case)			
-	this->setRotation(rotation);
+	//this->setRotation(rotation);
+	if (rotation)
+		this->setPositionY(border + rotation);
 	
 
 	//	If border is hit then split
@@ -79,7 +90,6 @@ void BirdPoo::update(float delta)
 		CCLog("BirdPoo out of sight and killed");
 		this->removeFromParentAndCleanup(true);
 	}
-
 }
 
 bool BirdPoo::isOutOfBorder()
@@ -96,12 +106,12 @@ bool BirdPoo::isOutOfBorder()
 
 void BirdPoo::split()
 {
-	//	Separate to two new ones
-	BirdPoo* left = BirdPoo::create(type, 0, PooDirectionLeft);
-	BirdPoo* right = BirdPoo::create(type, 0, PooDirectionRight);
-
 	CCPoint pos = this->getPosition();
 	pos.y += 10;
+
+	//	Separate to two new ones
+	BirdPoo* left = BirdPoo::create(type, pos.y, PooDirectionLeft);
+	BirdPoo* right = BirdPoo::create(type, pos.y, PooDirectionRight);
 
 	left->setPosition(pos);		
 	right->setPosition(pos);

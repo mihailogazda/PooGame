@@ -27,7 +27,7 @@ class BirdPoo : public cocos2d::CCLayer
 private:
 
 	float timer;
-	float jumpCount;
+	float jumpCount;	
 
 	//	Holds image data
 	cocos2d::CCSprite* sprite;	
