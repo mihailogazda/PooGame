@@ -24,6 +24,7 @@ rd bin /S /Q
 REM pack Resources
 md Resources
 xcopy /E %@resDir%\*.png Resources\*.*
+xcopy /E %@resDir%\*.plist Resources\*.*
 xcopy /E %@resDir%\*.mp3 Resources\*.*
 xcopy /E %@resDir%\*.wav Resources\*.*
 xcopy /E %@resDir%\*.xml Resources\*.*

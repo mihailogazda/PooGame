@@ -24,6 +24,7 @@ bool Bird::init()
 				break;
 			case BirdTypeDuke:
 				resourceName = "duke.png";
+				resourceAnim = "./animations/duke/";
 				break;
 		};		
 
@@ -74,6 +75,7 @@ bool Bird::init()
 
 				//	Adjust scale (for now - resources should be correct size)
 				sprite->setScale(0.6f);
+				
 			}
 		}
 
