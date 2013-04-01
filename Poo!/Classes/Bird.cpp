@@ -10,19 +10,22 @@ bool Bird::init()
 
 		//	Get name
 		char *resourceName = NULL;
+		char *resourceAnim = NULL;
 
 		switch (type)
 		{
 			case BirdTypeRegular:
 				resourceName = "bird.png";
+				resourceAnim = "./animations/regular/";
 				break;
 			case BirdTypeKing:
 				resourceName = "king.png";
+				resourceAnim = "./animations/king/";
 				break;
 			case BirdTypeDuke:
 				resourceName = "duke.png";
 				break;
-		};
+		};		
 
 		CC_BREAK_IF(!resourceName);
 
@@ -34,9 +37,45 @@ bool Bird::init()
 
 		//	Small position adjustment
 		sprite->setAnchorPoint(ccp(0.5, 0));
-		sprite->setPosition(ccp(0, -5));
+		sprite->setPosition(ccp(0, -5));		
 
 		this->addChild(sprite);
+
+		if (resourceAnim)
+		{
+			char img[MAX_PATH];
+			char map[MAX_PATH];
+
+			sprintf(img, "%s/assetData.png", resourceAnim);
+			sprintf(map, "%s/assetData.plist", resourceAnim);
+
+			//	Add sprite frames
+			CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile(map, img);
+
+			//	Load dict
+			CCDictionary* dic = CCDictionary::createWithContentsOfFile(map);						
+			if (dic)
+			{
+				//	Load frames
+				CCArray* names = CCArray::create();
+				dic = (CCDictionary*) dic->objectForKey("frames");
+
+				CCDictElement* p = NULL;
+				CCDICT_FOREACH(dic, p)
+				{
+					const char* val = p->getStrKey();
+					CCSpriteFrame* fr = CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(val);
+					names->addObject(fr);
+				}
+				
+				//	Start animation
+				CCAnimation* an = CCAnimation::createWithSpriteFrames(names, 1.0/30);
+				sprite->runAction(CCRepeatForever::create(CCAnimate::create(an)));
+
+				//	Adjust scale (for now - resources should be correct size)
+				sprite->setScale(0.6f);
+			}
+		}
 
 		return true;
 	} 
