@@ -7,11 +7,7 @@ bool Bird::init()
 	do
 	{
 		CC_BREAK_IF(!cocos2d::CCLayer::init());
-
-		//	Get name
-		char *resourceName = NULL;
-		char *resourceAnim = NULL;
-
+		
 		switch (type)
 		{
 			case BirdTypeRegular:
@@ -42,21 +38,7 @@ bool Bird::init()
 
 		this->addChild(sprite);
 
-		if (resourceAnim)
-		{
-			char img[MAX_PATH];
-			char map[MAX_PATH];
-
-			sprintf(img, "%s/assetData.png", resourceAnim);
-			sprintf(map, "%s/assetData.plist", resourceAnim);
-
-			animation = Animation::create(map, img);
-			if (animation)
-			{				
-				animation->start(this->sprite);
-				return true;
-			}			
-		}
+		this->animateCasual();
 
 		return true;
 	} 
@@ -65,7 +47,41 @@ bool Bird::init()
 	return false;
 }
 
+void Bird::animateCasual()
+{
+	char img[MAX_PATH];
+	char map[MAX_PATH];
+
+	sprintf(img, "%s/assetData.png", resourceAnim);
+	sprintf(map, "%s/assetData.plist", resourceAnim);
+
+	//	animation
+	animation = Animation::create(map, img);
+	if (animation)
+		animation->start(this->sprite);	
+}
+
 void Bird::dropPoo()
+{	
+	//	Animate crouch
+	animateDrop();
+
+	//	Animate poop
+	this->runAction(
+		CCSequence::createWithTwoActions(
+		CCDelayTime::create(0.65f), 
+		CCCallFunc::create(this, callfunc_selector(Bird::animatePoop))
+	));
+}
+
+void Bird::donePoop()
+{
+	CCLog("DOne poooping!");
+	this->sprite->stopAllActions();
+	this->animateCasual();
+}
+
+void Bird::createPhysics()
 {
 	int rank = Settings::shared()->memoryRankFromPosition(this->getPosition());	
 	int p = Settings::shared()->lineForPosition(rank + 1);
@@ -77,20 +93,40 @@ void Bird::dropPoo()
 	pos.y -= 20;
 
 	poo->setPosition(pos);
-	this->getParent()->addChild(poo);
+	this->getParent()->addChild(poo);	
+}
 
-	//	Poo animation
+void Bird::animatePoop()
+{
+	//
+	createPhysics();
+
+	//	Poo animation	
 	Animation* a = Animation::create("./Animations/poo/assetData.plist", "./Animations/poo/assetData.png", 1);	
 	CCSprite* s = CCSprite::create("poo.png");	
 	
-	pos.y += 10;
-	pos.x -= 5;
+	CCPoint pos = this->getPosition();
+	pos.y -= 10;
+	pos.x -= 0;
 	s->setAnchorPoint(ccp(0.5, 1));
 	s->setPosition(pos);
 	s->setScale(0.7f);
-
+	
 	this->getParent()->addChild(s);
 	a->start(s);
+}
+
+void Bird::animateDrop()
+{
+	this->sprite->stopAllActions();
+	Animation* anim = Animation::create(
+		"./animations/regular_crouch/assetData.plist", 
+		"./animations/regular_crouch/assetData.png", 
+		this,
+		callfunc_selector(Bird::donePoop),
+		1);
+	
+	anim->start(this->sprite);
 }
 
 PooType Bird::getPooType()

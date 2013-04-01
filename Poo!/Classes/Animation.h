@@ -18,22 +18,43 @@ private:
 
 	cocos2d::CCAnimate* animator;
 	cocos2d::CCAnimation* animation;	
-	cocos2d::CCAction* repeater;
+	cocos2d::CCFiniteTimeAction* repeater;
 
 	int repeatCount;
 	float animationSpeed;
+
+	cocos2d::SEL_CallFunc callback;
+	cocos2d::CCObject* callbackTarget;
+
+	void _reset()
+	{		
+		repeater = NULL;
+		animator = NULL;
+		animation = NULL;
+		callback = NULL;
+		callbackTarget = NULL;		
+	}
 
 public:
 
 	Animation(const char* map, const char* image, int repeat = 0, float animationSpeed = 0)
 	{
+		_reset();
 		this->map = map;
 		this->image = image;
 		this->repeatCount = repeat;
-		repeater = NULL;
-		animator = NULL;
-		animation = NULL;
+		this->animationSpeed = animationSpeed;		
+	}
+
+	Animation(const char* map, const char* image, cocos2d::CCObject* target, cocos2d::SEL_CallFunc sel,  int repeat = 0, float animationSpeed = 0)
+	{	
+		_reset();
+		this->map = map;
+		this->image = image;
+		this->repeatCount = repeat;
 		this->animationSpeed = animationSpeed;
+		callbackTarget = target;
+		callback = sel;
 	}
 
 	~Animation()
@@ -47,6 +68,7 @@ public:
 	virtual void stop();
 
 	static Animation* create(const char* map, const char* image, int repeat = 0, float animationSpeed = 0);
+	static Animation* create(const char* map, const char* image, cocos2d::CCObject* target, cocos2d::SEL_CallFunc sel, int repeat = 0, float animationSpeed = 0);
 
 };
 

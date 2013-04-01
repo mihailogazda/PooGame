@@ -32,7 +32,7 @@ private:
 	//	Points and score
 	bool wasInitiated;
 	int points;
-
+	float timeInitiated;
 
 	CCPoint originalPos;
 
@@ -81,6 +81,7 @@ private:
 		wasInitiated = false;
 
 		crateToggler = NULL;
+		timeInitiated = 0;
 	}
 
 public:

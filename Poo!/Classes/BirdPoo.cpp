@@ -2,7 +2,7 @@
 
 using namespace cocos2d;
 
-static const float _pooSpeed = 6.8f;
+static const float _pooSpeed = 6.3f;
 
 static const bool pooVisible = false;
 

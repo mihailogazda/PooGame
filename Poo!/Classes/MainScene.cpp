@@ -140,7 +140,6 @@ void MainScene::doSplat(CCObject* button)
 {	
 	theKing->dropPoo();
 
-
 	wasInitiated = true;
 	
 	CCMenuItemFont* f = dynamic_cast<CCMenuItemFont*>(button);
@@ -417,19 +416,21 @@ void MainScene::update(float delta)
 				}
 			}
 		}
-
-		//	Check if shiting is over
-		if (pooCount == 0)
+		
+		//	Check if shiting is over (after 5 seconds pass)
+		if (pooCount == 0 && timeInitiated >= 5.0f)
 		{
-			//this->gameOver();
-			//return;
 			wasInitiated = false;
-			this->runAction(CCSequence::createWithTwoActions(
+			/*this->runAction(CCSequence::createWithTwoActions(
 				CCDelayTime::create(1.5f), 
 				CCCallFunc::create(this, callfunc_selector(MainScene::gameOver))
-			));
-
+			));*/
+			gameOver();
 		}
+		else if (pooCount > 0)
+			timeInitiated = 0;
+		else if (pooCount == 0)
+			timeInitiated += delta;
 	}
 
 }

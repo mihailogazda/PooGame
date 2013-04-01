@@ -4,6 +4,18 @@ using namespace cocos2d;
 
 static const float defaultAnimationSpeed = 1.0/24;
 
+Animation* Animation::create(const char* map, const char* image,  CCObject* target, SEL_CallFunc sel, int repeat, float animationSpeed)
+{
+	Animation* m = new Animation(map, image, target, sel, repeat, animationSpeed);
+	if (m && m->init())
+	{
+		m->autorelease();
+		return m;
+	}
+
+	CC_SAFE_DELETE(m);
+	return NULL;
+}
 
 Animation* Animation::create(const char* map, const char* image, int repeat, float animationSpeed)
 {
@@ -54,7 +66,14 @@ bool Animation::init()
 		if (repeatCount == 0)
 			repeater = CCRepeatForever::create(animator);
 		else 
-			repeater = CCRepeat::create(animator, repeatCount);
+		{
+			CCFiniteTimeAction* a = repeater = CCRepeat::create(animator, repeatCount);
+
+			if (callback && callbackTarget)
+			{					
+				repeater = CCSequence::createWithTwoActions(a, CCCallFunc::create(callbackTarget, callback));
+			}
+		}		
 		
 		return true;
 	}

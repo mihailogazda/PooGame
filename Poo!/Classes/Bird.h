@@ -29,12 +29,25 @@ protected:
 
 	virtual PooType getPooType();
 
+	virtual void animateDrop();
+	virtual void donePoop();
+
+	virtual void createPhysics();
+
+	const char* resourceName;
+	const char* resourceAnim;
+
 	Bird()
 	{
 		type = BirdTypeRegular;
 		dying = false;
 		m_isHit = false;
+		resourceName = NULL;
+		resourceAnim = NULL;
 	}
+
+	virtual void animateCasual();
+	virtual void animatePoop();
 
 public:
 
@@ -48,6 +61,7 @@ public:
 	virtual void hit();
 	virtual bool isHit() { return m_isHit; }
 
+	
 	virtual void dropPoo();
 
 	CREATE_FUNC(Bird);
