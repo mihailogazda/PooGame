@@ -21,17 +21,9 @@ void main(void)
 {
 	vec4 m_color=texture2D(u_texture, v_texCoord).rgba;
 	gl_FragColor = m_color;	
-	return; // kill shader
+	//return; // kill shader
 
-	vec2 pixel=gl_FragCoord.xy;		
-	pixel.y=screenHeight-pixel.y;	
-	vec2 aux=lightpos-pixel;
-	float distance=length(aux);
-	float attenuation=1.0/(lightAttenuation.x+lightAttenuation.y*distance+lightAttenuation.z*distance*distance);	
-	vec4 color=vec4(attenuation,attenuation,attenuation,1.0)*vec4(lightColor,1.0);	
-	gl_FragColor = color;//*texture2D(u_texture,gl_TexCoord[0].st);
-
-	return; // light
+	
 
 
 

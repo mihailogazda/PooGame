@@ -76,6 +76,7 @@ void MainScene::createBackground()
     pSprite->setPosition(ccp(size.width/2, size.height/2));    
     this->addChild(pSprite, 0);
 
+	//	Add grass to each line with shader effect
 	for (int i = 0; i < Settings::shared()->levelSize(); i++)
 	{
 		int posY = Settings::shared()->lineForPosition(i);

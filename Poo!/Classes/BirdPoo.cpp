@@ -2,7 +2,7 @@
 
 using namespace cocos2d;
 
-float _pooSpeed = 1.5f;
+float _pooSpeed = 5.0f;
 
 BirdPoo* BirdPoo::create(PooType t, int border, PooDirection dir)
 {
@@ -38,9 +38,9 @@ void BirdPoo::update(float delta)
 	float posY = this->getPositionY();
 
 	timer += delta;		
-	float jumps = 3;
+	float jumps = 1;
 	float freq = 10;	
-	float ampl = 42 / pow(jumpCount + 1, 2);
+	float ampl = 42 / (jumpCount + 1);
 	float rotation = abs(sin(timer * freq)) * ampl;
 	
 	float jmpEvent = abs(sin(timer * freq));
