@@ -10,8 +10,14 @@ bool GameMenu::init()
 	
 	CCSize size = CCDirector::sharedDirector()->getWinSizeInPixels();
 	char* texture = "crate_steel.png";
+	
 	RepeatableSprite* r = RepeatableSprite::create(texture, size);
 	this->addChild(r);
+
+	/*MorphSprite* morphSprite = MorphSprite::create(texture, "./Shaders/water.fsh", size);
+	morphSprite->setPosition(ccp(100, 100));
+	morphSprite->setScale(5);
+	this->addChild(morphSprite);*/
 
 	logo = CCSprite::create("logo.png");
 	logo->setPosition(ccp(size.width / 2 + 110, size.height / 2 + 100));

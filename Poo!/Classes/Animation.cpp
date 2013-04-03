@@ -2,7 +2,7 @@
 
 using namespace cocos2d;
 
-static const float defaultAnimationSpeed = 1.0/24;
+static const float defaultAnimationSpeed = 1.0f/24;
 
 Animation* Animation::create(const char* map, const char* image,  CCObject* target, SEL_CallFunc sel, int repeat, float animationSpeed)
 {

@@ -41,8 +41,13 @@ class MorphSprite : public cocos2d::CCSprite, public cocos2d::CCTouchDelegate {
     virtual void ccTouchesEnded(cocos2d::CCSet *pTouches, cocos2d::CCEvent *pEvent);
     virtual void ccTouchesCancelled(cocos2d::CCSet *pTouches, cocos2d::CCEvent *pEvent);
     
+	const cocos2d::CCTexture2D* texture;
+
 public:
-    static MorphSprite* create(const char *pszFileName, const char *fshFileName);
+    
+	static MorphSprite* create(const char *pszFileName, const char *fshFileName);
+	static MorphSprite* create(const char *pszFileName, const char *fshFileName, cocos2d::CCSize size);
+	
 protected:
     MorphSprite();
     virtual ~MorphSprite();

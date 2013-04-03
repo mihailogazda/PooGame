@@ -22,6 +22,8 @@ MorphSprite::MorphSprite()
 
     _touch2PositionXUniformLocation=0; 
 	_touch2PositionYUniformLocation=0;
+
+	texture = NULL;
     
 }
 
@@ -36,6 +38,27 @@ MorphSprite* MorphSprite::create(const char *pszFileName, const char *fshFileNam
         pobSprite->autorelease();
         pobSprite->initShader(fshFileName);
         return pobSprite;
+    }
+    CC_SAFE_DELETE(pobSprite);
+    return NULL;
+}
+
+MorphSprite* MorphSprite::create(const char *pszFileName, const char *fshFileName, CCSize size){
+
+	CCTexture2D* tex = CCTextureCache::sharedTextureCache()->addImage(pszFileName);
+	if (!tex)
+		return NULL;	
+
+	//	This should repeat but because of the shader it wont
+	//ccTexParams params = {GL_LINEAR, GL_LINEAR, GL_REPEAT, GL_REPEAT};
+	//tex->setTexParameters(&params);
+
+	MorphSprite *pobSprite = new MorphSprite();
+	if (pobSprite && pobSprite->initWithTexture(tex, CCRectMake(0, 0, size.width, size.height)))
+	{		
+		pobSprite->autorelease();
+		pobSprite->initShader(fshFileName);
+		return pobSprite;
     }
     CC_SAFE_DELETE(pobSprite);
     return NULL;

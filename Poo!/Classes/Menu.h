@@ -4,6 +4,7 @@
 #include "cocos2d.h"
 #include "MainScene.h"
 #include "RepeatableSprite.h"
+#include "MorphSprite.h"
 
 class GameMenu : public cocos2d::CCScene
 {

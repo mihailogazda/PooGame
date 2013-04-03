@@ -24,6 +24,11 @@ private:
 
 public:
 
+	//	Getters
+	cocos2d::CCTexture2D* getTexture() { return texture; }
+	cocos2d::CCSize getSize() { return size; }
+
+	//	Init
 	virtual bool init()
 	{
 		bool ret = false;
