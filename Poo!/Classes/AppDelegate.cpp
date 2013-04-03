@@ -4,6 +4,7 @@
 #include "MainScene.h"
 #include "SimpleAudioEngine.h"
 #include "Resource.h"
+#include "Menu.h"
 
 using namespace CocosDenshion;
 
@@ -33,7 +34,8 @@ bool AppDelegate::applicationDidFinishLaunching()
     pDirector->setAnimationInterval(1.0 / 60);
 
 	//	Little hack
-	SetCurrentDirectory("..\\Resources\\");	
+#ifdef CC_PLATFORM_WIN32
+	SetCurrentDirectory("..\\Resources\\");
 
 	//	Set window size
 	extern HINSTANCE hGlobalInstance;
@@ -43,9 +45,10 @@ bool AppDelegate::applicationDidFinishLaunching()
 
 	HICON icon = LoadIcon(hGlobalInstance, MAKEINTRESOURCE(IDR_MAINFRAME));
 	SendMessage(window, WM_SETICON, (WPARAM) ICON_SMALL, (LPARAM) icon);
+#endif
 
     // create a scene. it's an autorelease object
-	CCScene *pScene = MainScene::scene();
+	CCScene *pScene = GameMenu::create();//MainScene::scene();
 
     // run
     pDirector->runWithScene(pScene);

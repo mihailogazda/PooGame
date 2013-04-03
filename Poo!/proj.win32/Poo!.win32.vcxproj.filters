@@ -73,6 +73,9 @@
     <ClInclude Include="..\Classes\Menu.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\RepeatableSprite.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Classes\MainScene.cpp">

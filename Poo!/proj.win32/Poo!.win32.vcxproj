@@ -133,6 +133,7 @@
     <ClInclude Include="..\Classes\MainScene.h" />
     <ClInclude Include="..\Classes\BirdPoo.h" />
     <ClInclude Include="..\Classes\Menu.h" />
+    <ClInclude Include="..\Classes\RepeatableSprite.h" />
     <ClInclude Include="..\Classes\Settings.h" />
     <ClInclude Include="..\External\Morph\MorphSprite.h" />
     <ClInclude Include="main.h" />
