@@ -263,6 +263,7 @@ void MainScene::ccTouchesEnded(CCSet* pTouches, CCEvent* pEvent)
 
 	if (selected)
 	{
+		//	If sprite is colliding with another sprite then return to original position
 		if (selected->sprite->getColor().b == 0)
 		{
 			selected->runAction(CCMoveTo::create(1, originalPos));
@@ -270,6 +271,7 @@ void MainScene::ccTouchesEnded(CCSet* pTouches, CCEvent* pEvent)
 			return;
 		}
 
+		//	Do not remove if moved (because it is selected)
 		CCPoint diff = ccpSub(selected->getPosition(), originalPos);
 		selected = NULL;
 

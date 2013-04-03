@@ -139,5 +139,11 @@ void Bird::hit()
 	m_isHit = true;
 
 	//	highlight
-	sprite->setColor(ccc3(255, 0, 0));
+	//sprite->setColor(ccc3(255, 0, 0));
+	CCSprite* splash = CCSprite::create("poo_splash.png");
+
+	splash->setPositionY(10);
+	splash->setScale(0.5f);
+
+	this->addChild(splash);
 }

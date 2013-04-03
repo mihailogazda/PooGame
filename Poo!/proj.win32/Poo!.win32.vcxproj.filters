@@ -70,6 +70,9 @@
     <ClInclude Include="..\Classes\Animation.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\Menu.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Classes\MainScene.cpp">
@@ -100,6 +103,9 @@
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\Animation.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Menu.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>

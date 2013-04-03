@@ -2,7 +2,7 @@
 
 using namespace cocos2d;
 
-static const float _pooSpeed = 6.3f;
+static const float _pooSpeed = 12.0f;
 
 static const bool pooVisible = false;
 
@@ -44,7 +44,7 @@ void BirdPoo::update(float delta)
 
 	timer += delta;		
 	float jumps = 1;
-	float freq = 10;	
+	float freq = 24;	
 	float ampl = 42 / (jumpCount + 1);
 	float rotation = abs(sin(timer * freq)) * ampl;
 	
