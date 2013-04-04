@@ -48,7 +48,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>.;..\Classes;$(SolutionDir)..\cocos2dx;$(SolutionDir)..\cocos2dx\include;$(SolutionDir)..\cocos2dx\kazmath\include;$(SolutionDir)..\cocos2dx\platform\win32;$(SolutionDir)..\cocos2dx\platform\third_party\win32;$(SolutionDir)..\cocos2dx\platform\third_party\win32\OGLES;$(SolutionDir)..\external;$(SolutionDir)..\CocosDenshion\include;$(ProjectDir)\..\External\Morph;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..\Classes;$(SolutionDir)..\cocos2dx;$(SolutionDir)..\cocos2dx\include;$(SolutionDir)..\cocos2dx\kazmath\include;$(SolutionDir)..\cocos2dx\platform\win32;$(SolutionDir)..\cocos2dx\platform\third_party\win32;$(SolutionDir)..\cocos2dx\platform\third_party\win32\OGLES;$(SolutionDir)..\external;$(SolutionDir)..\CocosDenshion\include;$(ProjectDir)\..\External\Morph;$(ProjectDir)\..\External\b2DebugDraw;$(ProjectDir)\..\External\json;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -63,7 +63,7 @@
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)\..\Debug.win32\;$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)\..\External\json\;$(SolutionDir)\..\Debug.win32\;$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>libcocos2d.lib;opengl32.lib;glew32.lib;libCocosDenshion.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ResourceCompile>
@@ -85,10 +85,10 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>.;..\Classes;$(SolutionDir)..\cocos2dx;$(SolutionDir)..\cocos2dx\include;$(SolutionDir)..\cocos2dx\kazmath\include;$(SolutionDir)..\cocos2dx\platform\win32;$(SolutionDir)..\cocos2dx\platform\third_party\win32;$(SolutionDir)..\cocos2dx\platform\third_party\win32\OGLES;$(SolutionDir)..\external;$(SolutionDir)..\CocosDenshion\include;$(ProjectDir)\..\External\Morph;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..\Classes;$(SolutionDir)..\cocos2dx;$(SolutionDir)..\cocos2dx\include;$(SolutionDir)..\cocos2dx\kazmath\include;$(SolutionDir)..\cocos2dx\platform\win32;$(SolutionDir)..\cocos2dx\platform\third_party\win32;$(SolutionDir)..\cocos2dx\platform\third_party\win32\OGLES;$(SolutionDir)..\external;$(SolutionDir)..\CocosDenshion\include;$(ProjectDir)\..\External\Morph;$(ProjectDir)\..\External\b2DebugDraw;$(ProjectDir)\..\External\json;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <ExceptionHandling>Async</ExceptionHandling>
       <DebugInformationFormat />
       <PreprocessorDefinitions>WIN32;_WINDOWS;STRICT;NDEBUG;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGSNDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -97,8 +97,8 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalLibraryDirectories>$(SolutionDir)\..\Release.win32;$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>libcocos2d.lib;opengl32.lib;glew32.lib;libBox2d.lib;libCocosDenshion.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)\..\External\json\;$(SolutionDir)\..\Release.win32;$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libcocos2d.lib;opengl32.lib;glew32.lib;libCocosDenshion.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>false</GenerateDebugInformation>
     </Link>
     <ResourceCompile>
@@ -133,9 +133,14 @@
     <ClInclude Include="..\Classes\MainScene.h" />
     <ClInclude Include="..\Classes\BirdPoo.h" />
     <ClInclude Include="..\Classes\Menu.h" />
+    <ClInclude Include="..\Classes\Physics.h" />
     <ClInclude Include="..\Classes\RepeatableSprite.h" />
     <ClInclude Include="..\Classes\Settings.h" />
+    <ClInclude Include="..\External\b2DebugDraw\B2DebugDrawLayer.h" />
+    <ClInclude Include="..\External\b2DebugDraw\GLES-Render.h" />
+    <ClInclude Include="..\External\json\json.h" />
     <ClInclude Include="..\External\Morph\MorphSprite.h" />
+    <ClInclude Include="..\External\ShapeHelper\ShapeHelper.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
@@ -148,8 +153,12 @@
     <ClCompile Include="..\Classes\GameLayer.cpp" />
     <ClCompile Include="..\Classes\MainScene.cpp" />
     <ClCompile Include="..\Classes\Menu.cpp" />
+    <ClCompile Include="..\Classes\Physics.cpp" />
     <ClCompile Include="..\Classes\Settings.cpp" />
+    <ClCompile Include="..\External\b2DebugDraw\B2DebugDrawLayer.cpp" />
+    <ClCompile Include="..\External\b2DebugDraw\GLES-Render.cpp" />
     <ClCompile Include="..\External\Morph\MorphSprite.cpp" />
+    <ClCompile Include="..\External\ShapeHelper\ShapeHelper.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

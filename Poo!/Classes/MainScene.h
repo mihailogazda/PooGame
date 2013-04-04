@@ -7,13 +7,7 @@
 #include "Block.h"
 #include "MorphSprite.h"
 #include "Settings.h"
-
-#ifdef ENABLE_BOX2D
-
-	#include "Box2D/Box2D.h"
-	#pragma comment (lib, "libBox2d.lib")
-
-#endif
+#include "Physics.h"
 
 using namespace cocos2d;
 
@@ -24,6 +18,7 @@ class MainScene : public cocos2d::CCLayer
 {
 private:			
 
+	b2World* world;
 	GameLayer* selected;
 	
 	//	Layer that holds birds and poo's

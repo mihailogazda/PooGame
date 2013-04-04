@@ -3,7 +3,6 @@
 
 #include "cocos2d.h"
 
-
 ///
 ///	My animation class for automated animations from Cocos2d spritesheets
 ///

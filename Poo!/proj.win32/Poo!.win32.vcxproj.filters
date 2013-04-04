@@ -25,6 +25,21 @@
     <Filter Include="source\external">
       <UniqueIdentifier>{b1b59c67-e8c2-4c6a-90d1-a192889a8bad}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\external\Box2D">
+      <UniqueIdentifier>{30f0cd57-7ab7-42f8-9794-4f596a33082a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\external\Box2D">
+      <UniqueIdentifier>{cec23e65-6944-4816-a1fc-5f598e738a80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\external\ShapeHelper">
+      <UniqueIdentifier>{3507b2ae-a1f1-495c-b02a-bdbfdca82cf8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\external\ShapeHelper">
+      <UniqueIdentifier>{e34bd3e8-2668-45cc-aaea-c6ca0ef11f12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\external\JSON">
+      <UniqueIdentifier>{1869e0db-1ff4-440a-ad14-7604c6e91bcc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\Poo!.ico">
@@ -76,6 +91,21 @@
     <ClInclude Include="..\Classes\RepeatableSprite.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\External\b2DebugDraw\B2DebugDrawLayer.h">
+      <Filter>include\external\Box2D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\b2DebugDraw\GLES-Render.h">
+      <Filter>include\external\Box2D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\ShapeHelper\ShapeHelper.h">
+      <Filter>include\external\ShapeHelper</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\json\json.h">
+      <Filter>include\external\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Physics.h">
+      <Filter>include\external\Box2D</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Classes\MainScene.cpp">
@@ -110,6 +140,18 @@
     </ClCompile>
     <ClCompile Include="..\Classes\Menu.cpp">
       <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\External\b2DebugDraw\B2DebugDrawLayer.cpp">
+      <Filter>source\external\Box2D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\External\b2DebugDraw\GLES-Render.cpp">
+      <Filter>source\external\Box2D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\External\ShapeHelper\ShapeHelper.cpp">
+      <Filter>source\external\ShapeHelper</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Physics.cpp">
+      <Filter>source\external\Box2D</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
