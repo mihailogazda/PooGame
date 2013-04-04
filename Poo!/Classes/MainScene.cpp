@@ -394,6 +394,21 @@ void MainScene::update(float delta)
 
 				CCPoint pooPos = p->getPosition();			
 				Bird* b = Finder<Bird>::findAtPosition(pooPos, gameContent);
+				CCRect rec(0, 0, 0, 0);
+				if (b)
+				 rec = CCRectMake(
+					b->getPositionX(), 
+					b->getPositionY(), 
+					b->getContentSize().width, 
+					b->getContentSize().height);
+
+				CCRect recPoo(0, 0, 0, 0);				
+				recPoo= CCRectMake(
+					p->getPositionX(), 
+					p->getPositionY(), 
+					p->getContentSize().width, 
+					p->getContentSize().height);
+				
 				Block* bl = Finder<Block>::findAtPosition(pooPos, gameContent);
 
 				if (bl)
@@ -402,7 +417,7 @@ void MainScene::update(float delta)
 					return;
 				}
 
-				if (b && !b->isHit())
+				if (b && recPoo.intersectsRect(rec) && !b->isHit())
 				{
 					//	Counter
 					points++;
@@ -420,7 +435,7 @@ void MainScene::update(float delta)
 		}
 		
 		//	Check if shiting is over (after 5 seconds pass)
-		if (pooCount == 0 && timeInitiated >= 5.0f)
+		if (pooCount == 0 && timeInitiated >= 3.0f)
 		{
 			wasInitiated = false;
 			/*this->runAction(CCSequence::createWithTwoActions(

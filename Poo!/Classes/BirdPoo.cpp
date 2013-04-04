@@ -4,7 +4,7 @@ using namespace cocos2d;
 
 static const float _pooSpeed = 12.0f;
 
-static const bool pooVisible = false;
+static const bool pooVisible = true;
 
 BirdPoo* BirdPoo::create(PooType t, int border, PooDirection dir)
 {
@@ -51,7 +51,9 @@ void BirdPoo::update(float delta)
 	float jmpEvent = abs(sin(timer * freq));
 	CCLog("rotation: %f", jmpEvent);
 
-	if (direction != PooDirectionCenter && jmpEvent <= 0.1f)
+	
+
+	if (direction != PooDirectionCenter && jmpEvent <= 0.15f)
 		jumpCount++;
 
 	if (jumpCount == jumps)
@@ -59,7 +61,6 @@ void BirdPoo::update(float delta)
 		this->removeFromParentAndCleanup(true);
 		return;
 	}
-
 
 	//	Check direction
 	switch (direction)
