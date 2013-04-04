@@ -5,6 +5,7 @@
 #include "GameLayer.h"
 #include "BirdPoo.h"
 #include "Animation.h"
+#include "Physics.h"
 #include "Settings.h"
 
 enum BirdType 
@@ -21,6 +22,8 @@ enum BirdType
 class Bird : public GameLayer
 {
 protected:
+
+	b2Body* body;	
 	
 	Animation* animation;
 	BirdType type;	
@@ -32,7 +35,7 @@ protected:
 	virtual void animateDrop();
 	virtual void donePoop();
 
-	virtual void createPhysics();
+	virtual void createPhysics();	
 
 	const char* resourceName;
 	const char* resourceAnim;
@@ -57,6 +60,7 @@ public:
 	cocos2d::CCSize size;	
 
 	virtual bool init();
+	virtual bool initBody(b2World* world);
 	
 	virtual void hit();
 	virtual bool isHit() { return m_isHit; }

@@ -61,7 +61,7 @@ public:
 	static ShapeHelper* create(const char* filename);
 
 	///	Gets b2PolygonShape for asset name
-	bool shapeForKey(char* name, cocos2d::CCSize size, __out std::list<b2PolygonShape> *out);
+	bool shapeForKey(char* name, cocos2d::CCSize size, __out std::list<b2PolygonShape> *out);	
 };
 
 

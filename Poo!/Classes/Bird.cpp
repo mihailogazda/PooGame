@@ -147,3 +147,53 @@ void Bird::hit()
 
 	this->addChild(splash);
 }
+
+bool Bird::initBody(b2World* world)
+{
+	do
+	{
+		//	Add bird body
+		CC_BREAK_IF(!world);
+
+		//	Body def
+		b2BodyDef d;
+		d.position.Set(SCREEN_TO_WORLD(this->getPositionX()), SCREEN_TO_WORLD(this->getPositionY()));
+		d.type = b2_staticBody;
+		d.userData = this;
+		this->retain();
+
+		body = world->CreateBody(&d);
+		CC_BREAK_IF(!body);
+
+		//	Get custom shape
+		ShapeHelper* s = ShapeHelper::create("./Animations/Regular/regular.data");
+		CC_BREAK_IF(!s);		
+
+		list<b2PolygonShape> shapes;		
+		CCSize size = sprite->getContentSize();
+
+		bool sh = s->shapeForKey("regular.png", size, &shapes);
+		CC_BREAK_IF(!sh);
+
+		b2FixtureDef fixtureDef;
+		fixtureDef.isSensor = true;
+		fixtureDef.userData = this;
+
+		//	have to recalculate total weight?
+		std::list<b2PolygonShape>::iterator pos;
+		for (pos = shapes.begin(); pos != shapes.end(); pos++)
+		{
+			b2PolygonShape p = *(pos);
+			
+			fixtureDef.shape = &p;
+			body->CreateFixture(&fixtureDef);
+		}
+		
+		return true;
+
+	} while (false);
+	
+
+
+	return false;
+}

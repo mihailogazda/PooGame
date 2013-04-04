@@ -48,7 +48,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>.;..\Classes;$(SolutionDir)..\cocos2dx;$(SolutionDir)..\cocos2dx\include;$(SolutionDir)..\cocos2dx\kazmath\include;$(SolutionDir)..\cocos2dx\platform\win32;$(SolutionDir)..\cocos2dx\platform\third_party\win32;$(SolutionDir)..\cocos2dx\platform\third_party\win32\OGLES;$(SolutionDir)..\external;$(SolutionDir)..\CocosDenshion\include;$(ProjectDir)\..\External\Morph;$(ProjectDir)\..\External\b2DebugDraw;$(ProjectDir)\..\External\json;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..\Classes;$(SolutionDir)..\cocos2dx;$(SolutionDir)..\cocos2dx\include;$(SolutionDir)..\cocos2dx\kazmath\include;$(SolutionDir)..\cocos2dx\platform\win32;$(SolutionDir)..\cocos2dx\platform\third_party\win32;$(SolutionDir)..\cocos2dx\platform\third_party\win32\OGLES;$(SolutionDir)..\external;$(SolutionDir)..\CocosDenshion\include;$(ProjectDir)\..\External\Morph;$(ProjectDir)\..\External\b2DebugDraw;$(ProjectDir)\..\External\json;$(ProjectDir)\..\External\ShapeHelper;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -85,7 +85,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>.;..\Classes;$(SolutionDir)..\cocos2dx;$(SolutionDir)..\cocos2dx\include;$(SolutionDir)..\cocos2dx\kazmath\include;$(SolutionDir)..\cocos2dx\platform\win32;$(SolutionDir)..\cocos2dx\platform\third_party\win32;$(SolutionDir)..\cocos2dx\platform\third_party\win32\OGLES;$(SolutionDir)..\external;$(SolutionDir)..\CocosDenshion\include;$(ProjectDir)\..\External\Morph;$(ProjectDir)\..\External\b2DebugDraw;$(ProjectDir)\..\External\json;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..\Classes;$(SolutionDir)..\cocos2dx;$(SolutionDir)..\cocos2dx\include;$(SolutionDir)..\cocos2dx\kazmath\include;$(SolutionDir)..\cocos2dx\platform\win32;$(SolutionDir)..\cocos2dx\platform\third_party\win32;$(SolutionDir)..\cocos2dx\platform\third_party\win32\OGLES;$(SolutionDir)..\external;$(SolutionDir)..\CocosDenshion\include;$(ProjectDir)\..\External\Morph;$(ProjectDir)\..\External\b2DebugDraw;$(ProjectDir)\..\External\json;$(ProjectDir)\..\External\ShapeHelper;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>

@@ -42,17 +42,19 @@ bool MainScene::init()
     {
 		// super init first
         CC_BREAK_IF(! CCLayer::init());
-              
+
+		//	Create Box2D world
+		CC_BREAK_IF(!initBox2D());
+             
 		//	Create background
 		createBackground();
-
 
 		//	Create world content node
 		this->gameContent = CCLayer::create();
 		this->addChild(gameContent);
 
 		//	Add king
-		createKing();
+		createKing();		
 		
 		//	Add menu
 		createMenu();
@@ -65,6 +67,33 @@ bool MainScene::init()
     } while (0);
 
     return bRet;
+}
+
+bool MainScene::initBox2D()
+{
+	do
+	{
+		b2Vec2 gravity(BOX_WORLD_GRAVITY, 0);
+		world = new b2World(gravity);
+		CC_BREAK_IF(!world);
+
+		bool sleeping = true;
+		world->SetAllowSleeping(sleeping);
+
+		//	create debug
+		worldDebug = B2DebugDrawLayer::create(world, PTM_RATIO);
+		CC_BREAK_IF(!worldDebug);
+
+		this->addChild(worldDebug, 1000);
+
+		return true;
+	}
+	while (false);
+
+	CC_SAFE_DELETE(world);
+	CC_SAFE_DELETE(worldDebug);
+
+	return false;
 }
 
 void MainScene::createBackground()
@@ -97,7 +126,8 @@ void MainScene::createKing()
 	float toX = size.width / 2;
 	float toY = Settings::shared()->lineForPosition(0);
 
-	theKing->setPosition(ccp(toX, toY));		
+	theKing->setPosition(ccp(toX, toY));
+	theKing->initBody(world);
 	this->gameContent->addChild(theKing);		
 
 
@@ -114,6 +144,7 @@ void MainScene::createKing()
 	{
 		Bird* b = Bird::create();
 		b->setPosition(toX, toY);
+		b->initBody(world);
 
 		toX += margin + width;
 		this->birds[rank]--;
@@ -448,6 +479,12 @@ void MainScene::update(float delta)
 			timeInitiated = 0;
 		else if (pooCount == 0)
 			timeInitiated += delta;
+	}
+
+
+	if (world)
+	{
+		world->Step(BOX_WOLRD_STEP, BOX_WORLD_VELOCITY_PASSES, BOX_WORLD_POSITION_PASSES);
 	}
 
 }

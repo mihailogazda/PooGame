@@ -18,7 +18,11 @@ class MainScene : public cocos2d::CCLayer
 {
 private:			
 
+	//	Box2D settings
 	b2World* world;
+	B2DebugDrawLayer* worldDebug;	
+	bool initBox2D();
+
 	GameLayer* selected;
 	
 	//	Layer that holds birds and poo's
@@ -77,6 +81,9 @@ private:
 
 		crateToggler = NULL;
 		timeInitiated = 0;
+
+		world = NULL;
+		worldDebug = NULL;
 	}
 
 public:

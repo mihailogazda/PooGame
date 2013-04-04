@@ -48,7 +48,13 @@ bool AppDelegate::applicationDidFinishLaunching()
 #endif
 
     // create a scene. it's an autorelease object
-	CCScene *pScene = GameMenu::create();//MainScene::scene();
+	CCScene *pScene = NULL;//GameMenu::create();//MainScene::scene();
+
+#ifdef _DEBUG
+	pScene = MainScene::scene();
+#else
+	pScene = GameMenu::create();
+#endif
 
     // run
     pDirector->runWithScene(pScene);
