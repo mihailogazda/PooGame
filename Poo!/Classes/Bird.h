@@ -15,6 +15,12 @@ enum BirdType
 	BirdTypeDuke
 };
 
+static const std::string animationDir = "./animations/";
+static const std::string assetMapFile = "assetData.plist";
+static const std::string assetImgFile = "assetData.png";
+
+static const std::string shapeDataFile = ".data";
+static const std::string assetDataFile = ".png";
 
 ///
 ///	Bird class 
@@ -36,28 +42,42 @@ protected:
 	virtual void donePoop();
 
 	virtual void createPhysics();	
-
-	const char* resourceName;
-	const char* resourceAnim;
+		
+	std::string resourceDir;
+	std::string resourceName;
+	
+	std::string resourcePNG;
 
 	Bird()
 	{
 		type = BirdTypeRegular;
 		dying = false;
 		m_isHit = false;
-		resourceName = NULL;
-		resourceAnim = NULL;
+		
+		body = NULL;
+		animation = NULL;
+
+	}
+
+	~Bird()
+	{
+		if (body)
+		{
+			b2World* w = body->GetWorld();
+			if (w) w->DestroyBody(body);
+		}
 	}
 
 	virtual void animateCasual();
 	virtual void animatePoop();
 
+	virtual void updatePositionForBody();
+
 public:
 
 	bool dying;
 
-	//	public size getter
-	cocos2d::CCSize size;	
+	virtual void update(float delta);
 
 	virtual bool init();
 	virtual bool initBody(b2World* world);

@@ -2,6 +2,8 @@
 
 using namespace cocos2d;
 
+
+
 bool Bird::init()
 {
 	do
@@ -11,34 +13,38 @@ bool Bird::init()
 		switch (type)
 		{
 			case BirdTypeRegular:
-				resourceName = "bird.png";
-				resourceAnim = "./animations/regular/";
+				resourceName = "regular";
+				resourceDir = animationDir + resourceName + "/";
 				break;
 			case BirdTypeKing:
-				resourceName = "king.png";
-				resourceAnim = "./animations/king/";
+				resourceName = "king";
+				resourceDir = animationDir + resourceName + "/";
 				break;
 			case BirdTypeDuke:
-				resourceName = "duke.png";
-				resourceAnim = "./animations/duke/";
+				resourceName = "duke";
+				resourceDir = animationDir + resourceName + "/";
 				break;
 		};		
 
-		CC_BREAK_IF(!resourceName);
+		CC_BREAK_IF(resourceName.empty());
+
+		//	Save full PNG path
+		resourcePNG = resourceDir + resourceName + assetDataFile;		
 
 		//	Create sprite
-		sprite = CCSprite::create(resourceName);		
+		sprite = CCSprite::create( resourcePNG.c_str() );
 		CC_BREAK_IF(!sprite);
-		
-		size = sprite->getContentSize();
 
 		//	Small position adjustment
-		sprite->setAnchorPoint(ccp(0.5, 0));
-		sprite->setPosition(ccp(0, -5));		
-
+		sprite->setAnchorPoint(ccp(0.5f, 0));
+		//sprite->setPosition(ccp(0, -5));				
 		this->addChild(sprite);
 
+		//	Animate casual
 		this->animateCasual();
+
+		//	Schedule update
+		this->scheduleUpdate();
 
 		return true;
 	} 
@@ -49,14 +55,11 @@ bool Bird::init()
 
 void Bird::animateCasual()
 {
-	char img[MAX_PATH];
-	char map[MAX_PATH];
-
-	sprintf(img, "%s/assetData.png", resourceAnim);
-	sprintf(map, "%s/assetData.plist", resourceAnim);
+	std::string map = resourceDir + assetMapFile;
+	std::string img = resourceDir + assetImgFile;
 
 	//	animation
-	animation = Animation::create(map, img);
+	animation = Animation::create(map.c_str(), img.c_str());
 	if (animation)
 		animation->start(this->sprite);	
 }
@@ -155,36 +158,52 @@ bool Bird::initBody(b2World* world)
 		//	Add bird body
 		CC_BREAK_IF(!world);
 
+		CCSize size = sprite->getContentSize();
+		CCPoint pos = this->getPosition();
+
+		size.width *= sprite->getScale();
+		size.height *= sprite->getScale();
+
 		//	Body def
 		b2BodyDef d;
-		d.position.Set(SCREEN_TO_WORLD(this->getPositionX()), SCREEN_TO_WORLD(this->getPositionY()));
+		d.position.Set(SCREEN_TO_WORLD(pos.x), SCREEN_TO_WORLD(pos.y));
 		d.type = b2_staticBody;
 		d.userData = this;
-		this->retain();
 
 		body = world->CreateBody(&d);
 		CC_BREAK_IF(!body);
 
 		//	Get custom shape
-		ShapeHelper* s = ShapeHelper::create("./Animations/Regular/regular.data");
-		CC_BREAK_IF(!s);		
+		string path = resourceDir + resourceName + shapeDataFile;
+		ShapeHelper* s = ShapeHelper::create(path.c_str());
+		CC_BREAK_IF(!s);
 
+		//	Get shapes
 		list<b2PolygonShape> shapes;		
-		CCSize size = sprite->getContentSize();
-
-		bool sh = s->shapeForKey("regular.png", size, &shapes);
+		
+		string res = resourceName + assetDataFile;
+		bool sh = s->shapeForKey(res.c_str(), size, &shapes);
 		CC_BREAK_IF(!sh);
 
 		b2FixtureDef fixtureDef;
+		
 		fixtureDef.isSensor = true;
-		fixtureDef.userData = this;
+		fixtureDef.userData = this;		
+
+		/*
+		-- BOX SHAPE WORKS
+		b2PolygonShape ps;
+		ps.SetAsBox(SCREEN_TO_WORLD(size.width / 2), SCREEN_TO_WORLD(size.height / 2));
+		fixtureDef.shape = &ps;
+
+		body->CreateFixture(&fixtureDef);
+		*/
 
 		//	have to recalculate total weight?
-		std::list<b2PolygonShape>::iterator pos;
-		for (pos = shapes.begin(); pos != shapes.end(); pos++)
+		std::list<b2PolygonShape>::iterator it;
+		for (it = shapes.begin(); it != shapes.end(); it++)
 		{
-			b2PolygonShape p = *(pos);
-			
+			b2PolygonShape p = *(it);			
 			fixtureDef.shape = &p;
 			body->CreateFixture(&fixtureDef);
 		}
@@ -193,7 +212,33 @@ bool Bird::initBody(b2World* world)
 
 	} while (false);
 	
-
+	if (body)
+	{
+		body->GetWorld()->DestroyBody(body);
+		body = NULL;
+	}
 
 	return false;
+}
+
+void Bird::update(float delta)
+{
+	updatePositionForBody();
+}
+
+void Bird::updatePositionForBody()
+{
+	if (body)
+	{
+		float x = this->getPositionX();
+		float y = this->getPositionY();
+		float a = 0;
+
+		y += sprite->getContentSize().height / 2;
+
+		x = SCREEN_TO_WORLD(x);
+		y = SCREEN_TO_WORLD(y);
+
+		body->SetTransform(b2Vec2(x, y), a);
+	}
 }

@@ -11,7 +11,10 @@
 //	JSON LIB HELP HERE
 //	http://jsoncpp.sourceforge.net/
 
-
+//	PhysicsEditor code parts
+//	https://github.com/nikhildhamsaniya/Physics-editor-sample (box2d)
+//	https://github.com/ksjogo/PBEHelper (chipmunk)
+//	https://github.com/scanf/Physics-editor-sample (chipmunk)
 
 
 class Shape 
@@ -61,7 +64,7 @@ public:
 	static ShapeHelper* create(const char* filename);
 
 	///	Gets b2PolygonShape for asset name
-	bool shapeForKey(char* name, cocos2d::CCSize size, __out std::list<b2PolygonShape> *out);	
+	bool shapeForKey(const char* name, cocos2d::CCSize size, __out std::list<b2PolygonShape> *out);	
 };
 
 

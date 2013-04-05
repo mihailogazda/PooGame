@@ -99,7 +99,7 @@ bool ShapeHelper::defineShapeFromData(Json::Value data, list<b2PolygonShape> *sh
 	return false;
 }
 
-bool ShapeHelper::shapeForKey(char* name, CCSize size, __out list<b2PolygonShape> *out)
+bool ShapeHelper::shapeForKey(const char* name, CCSize size, __out list<b2PolygonShape> *out)
 {
 	if (name == NULL || out == NULL)
 		return false;
@@ -125,29 +125,29 @@ bool ShapeHelper::shapeForKey(char* name, CCSize size, __out list<b2PolygonShape
 				//	correct vertices for current item size
 				for (unsigned int i = 0; i < count; i++)
 				{
-					float x = current.m_vertices[i].x;
-					float y = current.m_vertices[i].y;
+					float32 x = current.m_vertices[i].x;
+					float32 y = current.m_vertices[i].y;
 
-					float width = SCREEN_TO_WORLD(size.width);
-					float height = SCREEN_TO_WORLD(size.height);
-
+					float32 width = SCREEN_TO_WORLD(size.width);
+					float32 height = SCREEN_TO_WORLD(size.height);
+					
 					//	correct proportions
-					float xCorrector = 1.0f;
-					float yCorrector = 1.0f;
+					float32 xCorrector = 1.0f;
+					float32 yCorrector = 1.0f;
 
 					if(size.height < size.width)
 						yCorrector = size.width/size.height;
 					if(size.width < size.height)
-						xCorrector = size.height/size.width;				
-				
+						xCorrector = size.height / size.width;
+
 					//	scale properly from content size
 					x *= width * xCorrector;
-					y *= height * yCorrector;
+					y *= height * yCorrector;					
 
 					//	adjusting anchor point (physics editor 0x0 but box2d 0.5x0.5x)
 					x -= width / 2.0f;
-					y -= height / 2.0f;
-							
+					y -= height / 2.0f;					
+
 					vert[i].Set(x, y);
 				}
 			

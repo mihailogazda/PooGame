@@ -18,7 +18,7 @@ CCScene* MainScene::scene()
         CC_BREAK_IF(! layer);
 
         // add layer as a child to scene
-        scene->addChild(layer);
+        scene->addChild(layer);		
 
 		//	save for shared
 		_globalMainScene = scene;
@@ -44,7 +44,7 @@ bool MainScene::init()
         CC_BREAK_IF(! CCLayer::init());
 
 		//	Create Box2D world
-		CC_BREAK_IF(!initBox2D());
+		CC_BREAK_IF(!initBox2D());		
              
 		//	Create background
 		createBackground();
@@ -365,10 +365,13 @@ void MainScene::ccTouchesEnded(CCSet* pTouches, CCEvent* pEvent)
 				break;
 			default:
 				b = Bird::create();			
-		}	
+		}
 
 		//	Add birds to limiter
 		birds[memoryRank]--;
+
+		//	Init physical body
+		((Bird*) b)->initBody(world);
 	}
 	else
 	{
